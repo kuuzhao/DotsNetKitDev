@@ -18,7 +18,7 @@ public class TestSafetyHandle1 : MonoBehaviour
     // Update is called once per frame
     void OnGUI()
     {
-        if (GUI.Button(new Rect(100, 400, 200, 50), "TestSafetyHandle"))
+        if (GUI.Button(new Rect(100, 100, 200, 50), "TestSafetyHandle"))
         {
             var myJob = new MyJob1
             {
