@@ -5,18 +5,6 @@ using System;
 
 namespace Unity.Networking.Transport
 {
-    [StructLayout(LayoutKind.Explicit)]
-    internal struct UIntFloat
-    {
-        [FieldOffset(0)] public float floatValue;
-
-        [FieldOffset(0)] public uint intValue;
-
-        [FieldOffset(0)] public double doubleValue;
-
-        [FieldOffset(0)] public ulong longValue;
-    }
-
     /// <summary>
     /// Data streams can be used to serialize data over the network. The
     /// <c>DataStreamWriter</c> and <c>DataStreamReader</c> classes work together
@@ -80,177 +68,6 @@ namespace Unity.Networking.Transport
             UnityEngine.Debug.Log(info);
             AtomicSafetyHandle.GetWriterName(m_Safety);
             return true;
-        }
-
-        public struct DeferredByte
-        {
-            public void Update(byte value)
-            {
-#if ENABLE_UNITY_COLLECTIONS_CHECKS
-                if (m_writer.m_Data->bitIndex != 0)
-                    throw new InvalidOperationException("Cannot update a deferred writer without flushing packed writes");
-#endif
-                int oldOffset = m_writer.m_Data->length;
-                m_writer.m_Data->length = m_offset;
-                m_writer.Write(value);
-                m_writer.m_Data->length = oldOffset;
-            }
-
-            internal DataStreamWriter m_writer;
-            internal int m_offset;
-        }
-        public struct DeferredShort
-        {
-            public void Update(short value)
-            {
-#if ENABLE_UNITY_COLLECTIONS_CHECKS
-                if (m_writer.m_Data->bitIndex != 0)
-                    throw new InvalidOperationException("Cannot update a deferred writer without flushing packed writes");
-#endif
-                int oldOffset = m_writer.m_Data->length;
-                m_writer.m_Data->length = m_offset;
-                m_writer.Write(value);
-                m_writer.m_Data->length = oldOffset;
-            }
-
-            internal DataStreamWriter m_writer;
-            internal int m_offset;
-        }
-        public struct DeferredUShort
-        {
-            public void Update(ushort value)
-            {
-#if ENABLE_UNITY_COLLECTIONS_CHECKS
-                if (m_writer.m_Data->bitIndex != 0)
-                    throw new InvalidOperationException("Cannot update a deferred writer without flushing packed writes");
-#endif
-                int oldOffset = m_writer.m_Data->length;
-                m_writer.m_Data->length = m_offset;
-                m_writer.Write(value);
-                m_writer.m_Data->length = oldOffset;
-            }
-
-            internal DataStreamWriter m_writer;
-            internal int m_offset;
-        }
-        public struct DeferredInt
-        {
-            public void Update(int value)
-            {
-#if ENABLE_UNITY_COLLECTIONS_CHECKS
-                if (m_writer.m_Data->bitIndex != 0)
-                    throw new InvalidOperationException("Cannot update a deferred writer without flushing packed writes");
-#endif
-                int oldOffset = m_writer.m_Data->length;
-                m_writer.m_Data->length = m_offset;
-                m_writer.Write(value);
-                m_writer.m_Data->length = oldOffset;
-            }
-
-            internal DataStreamWriter m_writer;
-            internal int m_offset;
-        }
-        public struct DeferredUInt
-        {
-            public void Update(uint value)
-            {
-#if ENABLE_UNITY_COLLECTIONS_CHECKS
-                if (m_writer.m_Data->bitIndex != 0)
-                    throw new InvalidOperationException("Cannot update a deferred writer without flushing packed writes");
-#endif
-                int oldOffset = m_writer.m_Data->length;
-                m_writer.m_Data->length = m_offset;
-                m_writer.Write(value);
-                m_writer.m_Data->length = oldOffset;
-            }
-
-            internal DataStreamWriter m_writer;
-            internal int m_offset;
-        }
-        public struct DeferredFloat
-        {
-            public void Update(float value)
-            {
-#if ENABLE_UNITY_COLLECTIONS_CHECKS
-                if (m_writer.m_Data->bitIndex != 0)
-                    throw new InvalidOperationException("Cannot update a deferred writer without flushing packed writes");
-#endif
-                int oldOffset = m_writer.m_Data->length;
-                m_writer.m_Data->length = m_offset;
-                m_writer.Write(value);
-                m_writer.m_Data->length = oldOffset;
-            }
-
-            internal DataStreamWriter m_writer;
-            internal int m_offset;
-        }
-        public struct DeferredShortNetworkByteOrder
-        {
-            public void Update(short value)
-            {
-#if ENABLE_UNITY_COLLECTIONS_CHECKS
-                if (m_writer.m_Data->bitIndex != 0)
-                    throw new InvalidOperationException("Cannot update a deferred writer without flushing packed writes");
-#endif
-                int oldOffset = m_writer.m_Data->length;
-                m_writer.m_Data->length = m_offset;
-                m_writer.WriteNetworkByteOrder(value);
-                m_writer.m_Data->length = oldOffset;
-            }
-
-            internal DataStreamWriter m_writer;
-            internal int m_offset;
-        }
-        public struct DeferredUShortNetworkByteOrder
-        {
-            public void Update(ushort value)
-            {
-#if ENABLE_UNITY_COLLECTIONS_CHECKS
-                if (m_writer.m_Data->bitIndex != 0)
-                    throw new InvalidOperationException("Cannot update a deferred writer without flushing packed writes");
-#endif
-                int oldOffset = m_writer.m_Data->length;
-                m_writer.m_Data->length = m_offset;
-                m_writer.WriteNetworkByteOrder(value);
-                m_writer.m_Data->length = oldOffset;
-            }
-
-            internal DataStreamWriter m_writer;
-            internal int m_offset;
-        }
-        public struct DeferredIntNetworkByteOrder
-        {
-            public void Update(int value)
-            {
-#if ENABLE_UNITY_COLLECTIONS_CHECKS
-                if (m_writer.m_Data->bitIndex != 0)
-                    throw new InvalidOperationException("Cannot update a deferred writer without flushing packed writes");
-#endif
-                int oldOffset = m_writer.m_Data->length;
-                m_writer.m_Data->length = m_offset;
-                m_writer.WriteNetworkByteOrder(value);
-                m_writer.m_Data->length = oldOffset;
-            }
-
-            internal DataStreamWriter m_writer;
-            internal int m_offset;
-        }
-        public struct DeferredUIntNetworkByteOrder
-        {
-            public void Update(uint value)
-            {
-#if ENABLE_UNITY_COLLECTIONS_CHECKS
-                if (m_writer.m_Data->bitIndex != 0)
-                    throw new InvalidOperationException("Cannot update a deferred writer without flushing packed writes");
-#endif
-                int oldOffset = m_writer.m_Data->length;
-                m_writer.m_Data->length = m_offset;
-                m_writer.WriteNetworkByteOrder(value);
-                m_writer.m_Data->length = oldOffset;
-            }
-
-            internal DataStreamWriter m_writer;
-            internal int m_offset;
         }
 
         internal struct StreamData
@@ -475,12 +292,14 @@ namespace Unity.Networking.Transport
             m_Data->length += bytes;
         }
 
+#if false
         public DeferredByte Write(byte value)
         {
             var ret = new DeferredByte {m_writer = this, m_offset = m_Data->length + ((m_Data->bitIndex + 7) >> 3)};
             WriteBytes((byte*) &value, sizeof(byte));
             return ret;
         }
+#endif
 
         /// <summary>
         /// Copy byte array into the writers data buffer, up to the
@@ -504,79 +323,12 @@ namespace Unity.Networking.Transport
             byte[] strBytes = System.Text.Encoding.Unicode.GetBytes(str);
             int byteLen = strBytes.Length;
 
-            Write(byteLen);
+            // Write(byteLen);
             fixed (byte* p = strBytes)
             {
                 WriteBytes(p, byteLen);
             }
 
-        }
-
-        public DeferredShort Write(short value)
-        {
-            var ret = new DeferredShort {m_writer = this, m_offset = m_Data->length + ((m_Data->bitIndex + 7) >> 3)};
-            WriteBytes((byte*) &value, sizeof(short));
-            return ret;
-        }
-
-        public DeferredUShort Write(ushort value)
-        {
-            var ret = new DeferredUShort {m_writer = this, m_offset = m_Data->length + ((m_Data->bitIndex + 7) >> 3)};
-            WriteBytes((byte*) &value, sizeof(ushort));
-            return ret;
-        }
-
-        public DeferredInt Write(int value)
-        {
-            var ret = new DeferredInt {m_writer = this, m_offset = m_Data->length + ((m_Data->bitIndex + 7) >> 3)};
-            WriteBytes((byte*) &value, sizeof(int));
-            return ret;
-        }
-
-        public DeferredUInt Write(uint value)
-        {
-            var ret = new DeferredUInt {m_writer = this, m_offset = m_Data->length + ((m_Data->bitIndex + 7) >> 3)};
-            WriteBytes((byte*) &value, sizeof(uint));
-            return ret;
-        }
-
-        public DeferredShortNetworkByteOrder WriteNetworkByteOrder(short value)
-        {
-            var ret = new DeferredShortNetworkByteOrder {m_writer = this, m_offset = m_Data->length + ((m_Data->bitIndex + 7) >> 3)};
-            short netValue = IsLittleEndian ? ByteSwap(value) : value;
-            WriteBytes((byte*) &netValue, sizeof(short));
-            return ret;
-        }
-
-        public DeferredUShortNetworkByteOrder WriteNetworkByteOrder(ushort value)
-        {
-            var ret = new DeferredUShortNetworkByteOrder {m_writer = this, m_offset = m_Data->length + ((m_Data->bitIndex + 7) >> 3)};
-            WriteNetworkByteOrder((short) value);
-            return ret;
-        }
-
-        public DeferredIntNetworkByteOrder WriteNetworkByteOrder(int value)
-        {
-            var ret = new DeferredIntNetworkByteOrder {m_writer = this, m_offset = m_Data->length + ((m_Data->bitIndex + 7) >> 3)};
-            int netValue = IsLittleEndian ? ByteSwap(value) : value;
-            WriteBytes((byte*) &netValue, sizeof(int));
-            return ret;
-        }
-
-        public DeferredUIntNetworkByteOrder WriteNetworkByteOrder(uint value)
-        {
-            var ret = new DeferredUIntNetworkByteOrder {m_writer = this, m_offset = m_Data->length + ((m_Data->bitIndex + 7) >> 3)};
-            WriteNetworkByteOrder((int)value);
-            return ret;
-        }
-
-        public DeferredFloat Write(float value)
-        {
-            var ret = new DeferredFloat {m_writer = this, m_offset = m_Data->length + ((m_Data->bitIndex + 7) >> 3)};
-            UIntFloat uf = new UIntFloat();
-            uf.floatValue = value;
-            Write((int) uf.intValue);
-            return ret;
         }
 
         private void FlushBits()
