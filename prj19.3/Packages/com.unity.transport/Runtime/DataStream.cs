@@ -716,8 +716,8 @@ namespace Unity.Networking.Transport
             m_Safety = writer.m_Safety;
             // TODO: LZ:
             //      disable this for now, it seems to have a bug right now
-            AtomicSafetyHandle.UseSecondaryVersion(ref m_Safety);
-            AtomicSafetyHandle.SetAllowSecondaryVersionWriting(m_Safety, false);
+            //AtomicSafetyHandle.UseSecondaryVersion(ref m_Safety);
+            //AtomicSafetyHandle.SetAllowSecondaryVersionWriting(m_Safety, false);
 #endif
             m_bufferPtr = writer.GetUnsafeReadOnlyPtr() + offset;
             m_Length = length;
