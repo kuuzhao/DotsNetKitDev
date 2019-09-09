@@ -419,5 +419,6 @@ public class DefaultGhostDestroySystem<T> : ComponentSystem
                 UnityEngine.Object.Destroy(tr.gameObject);
 
         }
+        toBeDestroyedEntities.Dispose();
     }
 }

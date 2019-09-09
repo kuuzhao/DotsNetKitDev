@@ -30,15 +30,7 @@ public class Main : MonoBehaviour
 
         if (GUI.Button(new Rect(100, 100, 100, 50), "Start sever"))
         {
-            ClientServerSystemManager.InitServerSystems();
-
-            Unity.Networking.Transport.NetworkEndPoint ep = Unity.Networking.Transport.NetworkEndPoint.AnyIpv4;
-            ep.Port = 12345;
-            World serverWorld = ClientServerSystemManager.serverWorld;
-            var nsrs = serverWorld.GetExistingSystem<NetworkStreamReceiveSystem>();
-            nsrs.Listen(ep);
-
-            Debug.Log("Server started!");
+            Server.StartServer();
             showButton = false;
         }
 

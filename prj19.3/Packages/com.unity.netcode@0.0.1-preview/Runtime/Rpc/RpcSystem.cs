@@ -115,7 +115,7 @@ public class RpcSystem<TRpcCollection> : ComponentSystem
     {
         // TODO: LZ:
         //      not use Allocator.Persistent
-        var ents = m_RpcBufferQuery.ToEntityArray(Allocator.Persistent);
+        var ents = m_RpcBufferQuery.ToEntityArray(Allocator.TempJob);
         for (var i = 0; i < ents.Length; ++i)
         {
             var ent = ents[i];
@@ -135,6 +135,7 @@ public class RpcSystem<TRpcCollection> : ComponentSystem
 
             rpcBuf.Clear();
         }
+        ents.Dispose();
     }
 
     public RpcQueue<T> GetRpcQueue<T>() where T : struct, IRpcCommand
