@@ -75,14 +75,6 @@ namespace Unity.Networking.Transport
     [NativeContainer]
     public unsafe struct DataStreamWriter : IDisposable
     {
-        public bool CheckValid()
-        {
-            string info = string.Format("uniqueNumber({0}), versionNode({1}), version({2})", m_UniqueNumber, m_Safety.versionNode.ToString(), m_Safety.version);
-            AtomicSafetyHandle.GetWriterName(m_Safety);
-            UnityEngine.Debug.Log(info);
-            return true;
-        }
-
         public struct DeferredByte
         {
             public void Update(byte value)
@@ -266,7 +258,6 @@ namespace Unity.Networking.Transport
         [NativeDisableUnsafePtrRestriction] internal StreamData* m_Data;
 
 #if ENABLE_UNITY_COLLECTIONS_CHECKS
-        public int m_UniqueNumber;
         internal AtomicSafetyHandle m_Safety;
         [NativeSetClassTypeToNullOnSchedule] internal DisposeSentinel m_DisposeSentinel;
 #endif
@@ -275,7 +266,6 @@ namespace Unity.Networking.Transport
 
         public DataStreamWriter(int capacity, Allocator allocator)
         {
-            m_UniqueNumber = UnityEngine.Random.Range(1, 10000);
             m_Allocator = allocator;
             m_Data = (StreamData*)UnsafeUtility.Malloc(UnsafeUtility.SizeOf<StreamData>(), UnsafeUtility.AlignOf<StreamData>(), m_Allocator);
             m_Data->capacity = capacity;
@@ -724,6 +714,8 @@ namespace Unity.Networking.Transport
             if (offset + length > writer.Length)
                 throw new System.ArgumentOutOfRangeException();
             m_Safety = writer.m_Safety;
+            // TODO: LZ:
+            //      disable this for now, it seems to have a bug right now
             AtomicSafetyHandle.UseSecondaryVersion(ref m_Safety);
             AtomicSafetyHandle.SetAllowSecondaryVersionWriting(m_Safety, false);
 #endif

@@ -453,8 +453,6 @@ namespace Unity.Networking.Transport
 #endif
             public void Execute()
             {
-                dataStream.CheckValid();
-
 #if ENABLE_UNITY_COLLECTIONS_CHECKS
                 for (int i = 0; i < connectionList.Length; ++i)
                 {
@@ -487,8 +485,6 @@ namespace Unity.Networking.Transport
                 internalState = m_InternalState
 #endif
             };
-
-            m_DataStream.CheckValid();
 
             handle = clearJob.Schedule(dep);
             handle = job.Schedule(handle);
