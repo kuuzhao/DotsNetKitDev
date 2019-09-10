@@ -33,6 +33,7 @@ public class PlayerManager
 
 [UpdateInGroup(typeof(ServerSimulationSystemGroup))]
 [UpdateAfter(typeof(PlayerCommandReceiveSystem))]
+[UpdateBefore(typeof(DotsNetKit193GhostSendSystem))]
 public class PlayerMovement : ComponentSystem
 {
     ServerSimulationSystemGroup m_ServerSimulationSystemGroup;
@@ -63,7 +64,8 @@ public class PlayerMovement : ComponentSystem
             PlayerCommandData cmd;
             cmdBuf.GetDataAtTick(m_ServerSimulationSystemGroup.ServerTick, out cmd);
 
-            cube.position.x += cmd.horizontal;
+            if (cmd.horizontal > 0.000001f)
+                cube.position.x += cmd.horizontal;
             cube.position.z += cmd.vertical;
             PostUpdateCommands.SetComponent(ent, cube);
 

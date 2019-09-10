@@ -299,7 +299,9 @@ public class GhostSendSystem<TGhostSerializerCollection> : JobComponentSystem
             var serialChunks = new NativeList<PrioChunk>(ghostChunks.Length + serialSpawnChunks.Length, Allocator.Temp);
             serialChunks.AddRange(serialSpawnChunks);
             var existingChunks = new NativeHashMap<ArchetypeChunk, int>(ghostChunks.Length, Allocator.Temp);
-            int maxCount = 0;
+            // TODO: LZ:
+            //      temp hack, fix me
+            int maxCount = serialSpawnChunks.Length;
             for (int chunk = 0; chunk < ghostChunks.Length; ++chunk)
             {
                 SerializationState chunkState;
@@ -661,13 +663,13 @@ public class GhostSendSystem<TGhostSerializerCollection> : JobComponentSystem
         int sameBaselineCount = 0;
         for (ent = startIndex; ent < chunk.Count && dataStream.Length < TargetPacketSize; ++ent)
         {
-            #if ENABLE_UNITY_COLLECTIONS_CHECKS
+#if ENABLE_UNITY_COLLECTIONS_CHECKS
             if (ghosts[ent].ghostTypeIndex != ghostType)
             {
                 // FIXME: what needs to happen to support this case? Should it be treated as a respawn?
                 throw new InvalidOperationException("A ghost changed type, ghost must keep the same serializer type throughout their lifetime");
             }
-            #endif
+#endif
 
             int baseline0 = baselinePerEntity[ent * 3];
             int baseline1 = baselinePerEntity[ent * 3 + 1];

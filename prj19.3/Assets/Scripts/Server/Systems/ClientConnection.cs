@@ -52,6 +52,8 @@ public class LoadRemoteLevelSystem : ComponentSystem
 //      would be nice to have an async response of a RPC
 [DisableAutoCreation]
 [UpdateInGroup(typeof(ServerSimulationSystemGroup))]
+[UpdateBefore(typeof(AddNetworkIdSystem))] // TODO: LZ: fix this!!!
+[UpdateBefore(typeof(DotsNetKit193GhostSendSystem))]
 public class EnterGameSystem : ComponentSystem
 {
     EntityQuery m_NetworkConnection;
