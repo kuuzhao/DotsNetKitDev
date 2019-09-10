@@ -66,7 +66,7 @@ public class ReplicatedPrefabMgr
 
         // We don't want this GameObjectEntity to be added to World.Active.
         var oldWorldActive = World.Active;
-        World.Active = null;
+        World.Active = ecsWorld;
         go.AddComponent<GameObjectEntity>();
         World.Active = oldWorldActive;
 

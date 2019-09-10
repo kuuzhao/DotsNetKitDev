@@ -66,13 +66,17 @@ public class EnterGameSystem : ComponentSystem
     protected override void OnUpdate()
     {
         var entities = m_NetworkConnection.ToEntityArray(Allocator.TempJob);
+        var networkIds = m_NetworkConnection.ToComponentDataArray<NetworkIdComponent>(Allocator.TempJob);
         for (int i = 0; i < entities.Length; ++i)
         {
             var ent = entities[i];
+            var networkId = networkIds[i];
             PostUpdateCommands.RemoveComponent<LevelLoadingTag>(ent);
             PostUpdateCommands.AddComponent(ent, new NetworkStreamInGame());
+            PlayerManager.CreatePlayer(ent, networkId.Value);
         }
         entities.Dispose();
+        networkIds.Dispose();
     }
 }
 
