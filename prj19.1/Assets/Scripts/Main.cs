@@ -17,12 +17,12 @@ public class Main : MonoBehaviour
         ReplicatedPrefabMgr.Initialize();
 
     }
+
     void Start()
     {
         Screen.SetResolution(640, 480, false);
     }
 
-    // Update is called once per frame
     void OnGUI()
     {
         if (!showButton)
@@ -30,17 +30,10 @@ public class Main : MonoBehaviour
 
         if (GUI.Button(new Rect(100, 100, 100, 50), "Start sever"))
         {
-            ClientServerSystemManager.InitServerSystems();
-
-            Unity.Networking.Transport.NetworkEndPoint ep = Unity.Networking.Transport.NetworkEndPoint.AnyIpv4;
-            ep.Port = 12345;
-            World serverWorld = ClientServerSystemManager.serverWorld;
-            var nsrs = serverWorld.GetExistingSystem<NetworkStreamReceiveSystem>();
-            nsrs.Listen(ep);
-
-            Debug.Log("Server started!");
+            Server.StartServer();
             showButton = false;
         }
+
         if (GUI.Button(new Rect(100, 200, 100, 50), "Start client"))
         {
             ClientServerSystemManager.InitClientSystems();

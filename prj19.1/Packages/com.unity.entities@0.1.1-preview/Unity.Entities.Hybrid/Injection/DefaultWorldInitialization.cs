@@ -142,11 +142,15 @@ namespace Unity.Entities
                 // * OnEnable (Loading object from scene...)
                 if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
                 {
+                    // TODO: LZ:
+                    //      I think it's okay to not have an active world here
+#if false
                     // We are just gonna ignore this enter playmode reload.
                     // Can't see a situation where it would be useful to create something inbetween.
                     // But we really need to solve this at the root. The execution order is kind if crazy.
                     if (UnityEditor.EditorApplication.isPlaying)
                         Debug.LogError("Loading GameObjectEntity in Playmode but there is no active World");
+#endif
                 }
                 else
                 {
@@ -156,9 +160,9 @@ namespace Unity.Entities
                 }
             }
 #endif
-        }
+                }
 
-        public static List<Type> GetAllSystems(WorldSystemFilterFlags filterFlags)
+                public static List<Type> GetAllSystems(WorldSystemFilterFlags filterFlags)
         {
             var systemTypes = new List<Type>();
             ICustomBootstrap bootstrap = null;
