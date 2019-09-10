@@ -44,6 +44,7 @@ public class InputSystem : ComponentSystem
                 var cmdBuf = EntityManager.GetBuffer<PlayerCommandData>(ent);
 
                 PlayerCommandData cmdData = default;
+                cmdData.tick = NetworkTimeSystem.predictTargetTick;
                 cmdData.horizontal = Input.GetAxisRaw("Horizontal");
                 cmdData.vertical = Input.GetAxisRaw("Vertical");
 

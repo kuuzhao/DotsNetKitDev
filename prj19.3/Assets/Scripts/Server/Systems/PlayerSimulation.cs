@@ -64,9 +64,8 @@ public class PlayerMovement : ComponentSystem
             PlayerCommandData cmd;
             cmdBuf.GetDataAtTick(m_ServerSimulationSystemGroup.ServerTick, out cmd);
 
-            if (cmd.horizontal > 0.000001f)
-                cube.position.x += cmd.horizontal;
-            cube.position.z += cmd.vertical;
+            cube.position.x += cmd.horizontal * 0.1f;
+            cube.position.z += cmd.vertical * 0.1f;
             PostUpdateCommands.SetComponent(ent, cube);
 
             tr.position = cube.position;

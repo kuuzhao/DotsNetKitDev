@@ -5,7 +5,7 @@ using Unity.Networking.Transport;
 
 public struct PlayerCommandData : ICommandData<PlayerCommandData>
 {
-    private uint tick;
+    public uint tick;
     public float horizontal;
     public float vertical;
 
