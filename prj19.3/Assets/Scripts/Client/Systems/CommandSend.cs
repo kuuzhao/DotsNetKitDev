@@ -17,7 +17,7 @@ public class InputSystem : ComponentSystem
 {
     EntityQuery cmdTargetGroup;
 
-    protected override void OnCreateManager()
+    protected override void OnCreate()
     {
         cmdTargetGroup = GetEntityQuery(
             ComponentType.ReadWrite<CommandTargetComponent>(),

@@ -36,7 +36,7 @@ public class GhostReceiveSystem<TGhostDeserializerCollection> : JobComponentSyst
     private BeginSimulationEntityCommandBufferSystem m_Barrier;
 
     private NativeQueue<DelayedDespawnGhost> m_DelayedDespawnQueue;
-    protected override void OnCreateManager()
+    protected override void OnCreate()
     {
         serializers = default(TGhostDeserializerCollection);
         m_ghostEntityMap = World.GetOrCreateSystem<GhostReceiveSystemGroup>().GhostEntityMap;
@@ -63,7 +63,7 @@ public class GhostReceiveSystem<TGhostDeserializerCollection> : JobComponentSyst
 #endif
     private NetworkCompressionModel m_CompressionModel;
 
-    protected override void OnDestroyManager()
+    protected override void OnDestroy()
     {
 #if ENABLE_UNITY_COLLECTIONS_CHECKS
         m_NetStats.Dispose();

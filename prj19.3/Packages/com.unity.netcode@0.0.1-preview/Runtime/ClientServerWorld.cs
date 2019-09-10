@@ -93,7 +93,7 @@ public class ClientSimulationSystemGroup : ComponentSystemGroup
     public float UpdateTime => Time.time - m_fixedTimeLoop.accumulatedTime;
     public float UpdateDeltaTime => FixedTimeLoop.fixedTimeStep;
 
-    protected override void OnCreateManager()
+    protected override void OnCreate()
     {
         m_beginBarrier = World.GetOrCreateSystem<BeginSimulationEntityCommandBufferSystem>();
         m_endBarrier = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
@@ -133,7 +133,7 @@ public class ClientPresentationSystemGroup : ComponentSystemGroup
     private BeginPresentationEntityCommandBufferSystem m_beginBarrier;
     private EndPresentationEntityCommandBufferSystem m_endBarrier;
 
-    protected override void OnCreateManager()
+    protected override void OnCreate()
     {
         m_beginBarrier = World.GetOrCreateSystem<BeginPresentationEntityCommandBufferSystem>();
         m_endBarrier = World.GetOrCreateSystem<EndPresentationEntityCommandBufferSystem>();

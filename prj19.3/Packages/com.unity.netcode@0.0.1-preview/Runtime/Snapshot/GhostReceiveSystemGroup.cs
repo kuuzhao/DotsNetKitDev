@@ -7,12 +7,12 @@ using Unity.Entities;
 public class GhostReceiveSystemGroup : ComponentSystemGroup
 {
     // having the group own the ghost map is a bit of a hack to solve a problem with accessing the receiver system from the default spawn system (because it is generic)
-    protected override void OnCreateManager()
+    protected override void OnCreate()
     {
         m_ghostEntityMap = new NativeHashMap<int, GhostEntity>(2048, Allocator.Persistent);
     }
 
-    protected override void OnDestroyManager()
+    protected override void OnDestroy()
     {
         m_ghostEntityMap.Dispose();
     }

@@ -32,7 +32,7 @@ public class NetworkTimeSystem : ComponentSystem
     private const int KRTTHistorySize = 8;
     private const int KSnapshotHistoryMedianDiscard = 4;
     private const int KRTTHistoryMedianDiscard = 2;
-    protected override void OnCreateManager()
+    protected override void OnCreate()
     {
         connectionGroup = GetEntityQuery(ComponentType.ReadOnly<NetworkSnapshotAckComponent>());
         receiveHistory = new NativeArray<uint>(KSnapshotHistorySize, Allocator.Persistent);
@@ -40,7 +40,7 @@ public class NetworkTimeSystem : ComponentSystem
         resetHistory = true;
     }
 
-    protected override void OnDestroyManager()
+    protected override void OnDestroy()
     {
         receiveHistory.Dispose();
         rttHistory.Dispose();

@@ -270,7 +270,7 @@ class GhostStatsSystem : ComponentSystem
     private string ghostList;
     private byte[] ghostStatData;
     private NativeArray<uint> stats;
-    protected override void OnCreateManager()
+    protected override void OnCreate()
     {
         lastFrame = 0;
         connectionGroup = GetEntityQuery(ComponentType.ReadWrite<NetworkSnapshotAckComponent>());
@@ -292,7 +292,7 @@ class GhostStatsSystem : ComponentSystem
         stats = recvStats;
     }
 
-    protected override void OnDestroyManager()
+    protected override void OnDestroy()
     {
         socket.Dispose();
     }

@@ -66,7 +66,7 @@ public abstract class DefaultGhostSpawnSystem<T> : JobComponentSystem
         return inputDeps;
     }
 
-    protected override void OnCreateManager()
+    protected override void OnCreate()
     {
         m_NewGhosts = new NativeList<T>(16, Allocator.Persistent);
         m_NewGhostIds = new NativeList<int>(16, Allocator.Persistent);
@@ -92,7 +92,7 @@ public abstract class DefaultGhostSpawnSystem<T> : JobComponentSystem
         m_PredictionSpawnCleanupMap = new NativeHashMap<int, int>(16, Allocator.Persistent);
     }
 
-    protected override void OnDestroyManager()
+    protected override void OnDestroy()
     {
         m_NewGhosts.Dispose();
         m_NewGhostIds.Dispose();
@@ -399,7 +399,7 @@ public class DefaultGhostDestroySystem<T> : ComponentSystem
 {
     protected EntityQuery m_DestroyGroup;
 
-    protected override void OnCreateManager()
+    protected override void OnCreate()
     {
         m_DestroyGroup = GetEntityQuery(ComponentType.ReadOnly<T>(),
             ComponentType.Exclude<ReplicatedEntityComponent>(), ComponentType.Exclude<PredictedSpawnRequestComponent>());

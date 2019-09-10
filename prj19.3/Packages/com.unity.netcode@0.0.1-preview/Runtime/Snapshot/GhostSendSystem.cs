@@ -91,7 +91,7 @@ public class GhostSendSystem<TGhostSerializerCollection> : JobComponentSystem
     private ServerSimulationSystemGroup m_ServerSimulation;
     private BeginSimulationEntityCommandBufferSystem m_Barrier;
     private NetworkStreamReceiveSystem m_ReceiveSystem;
-    protected override void OnCreateManager()
+    protected override void OnCreate()
     {
         serializers = default(TGhostSerializerCollection);
         m_DataStream = new DataStreamWriter(2048, Allocator.Persistent);
@@ -128,7 +128,7 @@ public class GhostSendSystem<TGhostSerializerCollection> : JobComponentSystem
         m_SerialSpawnChunks = new NativeList<PrioChunk>(1024, Allocator.Persistent);
     }
 
-    protected override void OnDestroyManager()
+    protected override void OnDestroy()
     {
         m_SerialSpawnChunks.Dispose();
         m_CompressionModel.Dispose();

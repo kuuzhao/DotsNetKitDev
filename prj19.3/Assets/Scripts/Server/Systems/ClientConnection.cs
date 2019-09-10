@@ -14,7 +14,7 @@ public class LoadRemoteLevelSystem : ComponentSystem
 {
     EntityQuery m_NetworkConnection;
     
-    protected override void OnCreateManager()
+    protected override void OnCreate()
     {
         m_NetworkConnection = GetEntityQuery(
             ComponentType.ReadOnly<NetworkIdComponent>(),
@@ -55,7 +55,7 @@ public class LoadRemoteLevelSystem : ComponentSystem
 public class EnterGameSystem : ComponentSystem
 {
     EntityQuery m_NetworkConnection;
-    protected override void OnCreateManager()
+    protected override void OnCreate()
     {
         m_NetworkConnection = GetEntityQuery(
             ComponentType.ReadOnly<NetworkIdComponent>(),
@@ -81,7 +81,7 @@ public class EnterGameSystem : ComponentSystem
 public class HandleDisconnect : ComponentSystem
 {
     EntityQuery m_NetworkConnection;
-    protected override void OnCreateManager()
+    protected override void OnCreate()
     {
         m_NetworkConnection = GetEntityQuery(
             ComponentType.ReadWrite<NetworkIdComponent>(),

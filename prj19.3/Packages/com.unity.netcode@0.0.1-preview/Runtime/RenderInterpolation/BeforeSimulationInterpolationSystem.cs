@@ -12,7 +12,7 @@ public class BeforeSimulationInterpolationSystem : JobComponentSystem
 {
     private EntityQuery positionInterpolationGroup;
     private EntityQuery rotationInterpolationGroup;
-    protected override void OnCreateManager()
+    protected override void OnCreate()
     {
         positionInterpolationGroup = GetEntityQuery(ComponentType.ReadOnly<CurrentSimulatedPosition>(),
             ComponentType.ReadWrite<PreviousSimulatedPosition>(), ComponentType.ReadWrite<Translation>());

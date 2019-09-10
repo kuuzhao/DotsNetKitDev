@@ -21,7 +21,7 @@ public class RenderInterpolationSystem : JobComponentSystem
     private EntityQuery posInterpolationGroup;
     private EntityQuery rotInterpolationGroup;
     private uint lastInterpolationVersion;
-    protected override void OnCreateManager()
+    protected override void OnCreate()
     {
         posInterpolationGroup = GetEntityQuery(
             ComponentType.ReadWrite<Translation>(),
