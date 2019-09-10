@@ -24,9 +24,6 @@ public class LoadRemoteLevelSystem : ComponentSystem
 
     protected override void OnUpdate()
     {
-        if (m_NetworkConnection.IsEmptyIgnoreFilter)
-            return;
-
         var entities = m_NetworkConnection.ToEntityArray(Allocator.TempJob);
         var networkIds = m_NetworkConnection.ToComponentDataArray<NetworkIdComponent>(Allocator.TempJob);
 
@@ -34,6 +31,8 @@ public class LoadRemoteLevelSystem : ComponentSystem
         {
             var ent = entities[i];
             var networkId = networkIds[i];
+
+            Debug.Log(string.Format("New client({0}) connected.", networkId.Value));
 
             // Load level RPC
             var rpcLoadLevelQueue = ClientServerSystemManager.serverWorld.GetOrCreateSystem<DotsNetKit193RpcSystem>().GetRpcQueue<RpcLoadLevel>();
@@ -51,6 +50,8 @@ public class LoadRemoteLevelSystem : ComponentSystem
 // TODO: LZ:
 //      we may want to only enter game, after the level is loaded.
 //      would be nice to have an async response of a RPC
+[DisableAutoCreation]
+[UpdateInGroup(typeof(ServerSimulationSystemGroup))]
 public class EnterGameSystem : ComponentSystem
 {
     EntityQuery m_NetworkConnection;
@@ -64,9 +65,6 @@ public class EnterGameSystem : ComponentSystem
 
     protected override void OnUpdate()
     {
-        if (m_NetworkConnection.IsEmptyIgnoreFilter)
-            return;
-
         var entities = m_NetworkConnection.ToEntityArray(Allocator.TempJob);
         for (int i = 0; i < entities.Length; ++i)
         {
@@ -75,5 +73,31 @@ public class EnterGameSystem : ComponentSystem
             PostUpdateCommands.AddComponent(ent, new NetworkStreamInGame());
         }
         entities.Dispose();
+    }
+}
+
+[DisableAutoCreation]
+[UpdateInGroup(typeof(ServerSimulationSystemGroup))]
+public class HandleDisconnect : ComponentSystem
+{
+    EntityQuery m_NetworkConnection;
+    protected override void OnCreateManager()
+    {
+        m_NetworkConnection = GetEntityQuery(
+            ComponentType.ReadWrite<NetworkIdComponent>(),
+            ComponentType.ReadWrite<NetworkStreamDisconnected>());
+    }
+
+    protected override void OnUpdate()
+    {
+        var networkIds = m_NetworkConnection.ToComponentDataArray<NetworkIdComponent>(Allocator.TempJob);
+
+        for (int i = 0; i < networkIds.Length; ++i)
+        {
+            var networkId = networkIds[i];
+            Debug.Log(string.Format("Client({0}) disconnected.", networkId.Value));
+        }
+
+        networkIds.Dispose();
     }
 }
