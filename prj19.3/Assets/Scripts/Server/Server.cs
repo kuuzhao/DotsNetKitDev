@@ -6,8 +6,18 @@ using UnityEngine.SceneManagement;
 
 public class Server
 {
-    public static void StartServer()
+    // TODO: LZ:
+    //      simplify the setup here
+    public static void Start()
     {
+        Application.targetFrameRate = 60;
+
+        Debug.Log("ClientServerSystemManager.CollectAllSystems()");
+        ClientServerSystemManager.CollectAllSystems();
+
+        Debug.Log("ReplicatedPrefabMgr.Initialize()");
+        ReplicatedPrefabMgr.Initialize();
+
         ClientServerSystemManager.InitServerSystems();
 
         Unity.Networking.Transport.NetworkEndPoint ep = Unity.Networking.Transport.NetworkEndPoint.AnyIpv4;
@@ -16,8 +26,10 @@ public class Server
         var nsrs = serverWorld.GetExistingSystem<NetworkStreamReceiveSystem>();
         nsrs.Listen(ep);
 
-        Debug.Log("Server started!");
+        Console.WriteLine(string.Format("Server is listening on port ({0})", ep.Port));
 
-        SceneManager.LoadScene("Level1");
+        string levelName = "Level1";
+        SceneManager.LoadScene(levelName);
+        Console.WriteLine(string.Format("Load level ({0})", levelName));
     }
 }

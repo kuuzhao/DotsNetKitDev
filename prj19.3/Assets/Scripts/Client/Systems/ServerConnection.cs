@@ -28,7 +28,7 @@ public class ServerConnection : ComponentSystem
             var networkIdComp = networkIdComps[0];
 
             sNetworkId = networkIdComp.Value;
-            Debug.Log(string.Format("Connection to server established. Assigned NetworkId({0}).", sNetworkId));
+            Console.WriteLine(string.Format("NetworkId({0}) Assigned .", sNetworkId));
 
             EntityManager.AddComponentData(connectionEntity, new NetworkStreamInGame());
         }

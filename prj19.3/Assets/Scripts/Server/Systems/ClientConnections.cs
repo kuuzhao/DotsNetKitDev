@@ -32,7 +32,7 @@ public class LoadRemoteLevelSystem : ComponentSystem
             var ent = entities[i];
             var networkId = networkIds[i];
 
-            Debug.Log(string.Format("New client({0}) connected.", networkId.Value));
+            Console.WriteLine(string.Format("New client({0}) connected.", networkId.Value));
 
             // Load level RPC
             var rpcLoadLevelQueue = ClientServerSystemManager.serverWorld.GetOrCreateSystem<DotsNetKit193RpcSystem>().GetRpcQueue<RpcLoadLevel>();

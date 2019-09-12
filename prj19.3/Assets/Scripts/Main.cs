@@ -5,18 +5,7 @@ using Unity.Entities;
 
 public class Main : MonoBehaviour
 {
-    bool showButton = true;
-    void Awake()
-    {
-        Application.targetFrameRate = 60;
-
-        Debug.Log("ClientServerSystemManager.CollectAllSystems()");
-        ClientServerSystemManager.CollectAllSystems();
-
-        Debug.Log("ReplicatedPrefabMgr.Initialize()");
-        ReplicatedPrefabMgr.Initialize();
-
-    }
+    private bool showButton = true;
 
     void Start()
     {
@@ -30,20 +19,13 @@ public class Main : MonoBehaviour
 
         if (GUI.Button(new Rect(100, 100, 100, 50), "Start sever"))
         {
-            Server.StartServer();
+            Server.Start();
             showButton = false;
         }
 
         if (GUI.Button(new Rect(100, 200, 100, 50), "Start client"))
         {
-            ClientServerSystemManager.InitClientSystems();
-
-            Unity.Networking.Transport.NetworkEndPoint ep = Unity.Networking.Transport.NetworkEndPoint.Parse("127.0.0.1",
-                12345);
-            World clientWorld = ClientServerSystemManager.clientWorld;
-            Entity ent = clientWorld.GetExistingSystem<NetworkStreamReceiveSystem>().Connect(ep);
-
-            Debug.Log("Client initialized");
+            Client.Start();
             showButton = false;
         }
     }

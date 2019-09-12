@@ -85,6 +85,7 @@ public struct RepCubeSnapshotData : ISnapshotData<RepCubeSnapshotData>
     public void Interpolate(ref RepCubeSnapshotData target, float factor)
     {
         SetRepCubeComponentDataposition(math.lerp(GetRepCubeComponentDataposition(), target.GetRepCubeComponentDataposition(), factor));
+        SetRepCubeComponentDatacolor(math.lerp(GetRepCubeComponentDatacolor(), target.GetRepCubeComponentDatacolor(), factor));
 
     }
 }
