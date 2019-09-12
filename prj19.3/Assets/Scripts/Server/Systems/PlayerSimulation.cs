@@ -23,9 +23,15 @@ public class PlayerManager
         var cubeData = new RepCubeComponentData {
             networkId = networkId,
             position = new Unity.Mathematics.float3(
-                Random.Range(-5.0f, 5.0f), 0f, Random.Range(-5.0f, 5.0f))
+                Random.Range(-5.0f, 5.0f), 0f, Random.Range(-5.0f, 5.0f)),
+            color = new Unity.Mathematics.float3(
+                Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f))
         };
         em.SetComponentData(ent, cubeData);
+
+        var transform = em.GetComponentObject<Transform>(ent);
+        transform.GetComponent<Renderer>().material.color =
+            new Color(cubeData.color.x, cubeData.color.y, cubeData.color.z);
 
         return ent;
     }

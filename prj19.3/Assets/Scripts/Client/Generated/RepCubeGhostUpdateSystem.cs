@@ -26,6 +26,7 @@ public class RepCubeGhostUpdateSystem : JobComponentSystem
 
             ghostRepCubeComponentData.networkId = snapshotData.GetRepCubeComponentDatanetworkId();
             ghostRepCubeComponentData.position = snapshotData.GetRepCubeComponentDataposition();
+            ghostRepCubeComponentData.color = snapshotData.GetRepCubeComponentDatacolor();
 
         }
     }
@@ -46,6 +47,7 @@ public class RepCubeGhostUpdateSystem : JobComponentSystem
 
             ghostRepCubeComponentData.networkId = snapshotData.GetRepCubeComponentDatanetworkId();
             ghostRepCubeComponentData.position = snapshotData.GetRepCubeComponentDataposition();
+            ghostRepCubeComponentData.color = snapshotData.GetRepCubeComponentDatacolor();
 
         }
     }

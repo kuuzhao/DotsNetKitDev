@@ -43,6 +43,7 @@ public struct RepCubeGhostSerializer : IGhostSerializer<RepCubeSnapshotData>
         var chunkDataRepCubeComponentData = chunk.GetNativeArray(ghostRepCubeComponentDataType);
         snapshot.SetRepCubeComponentDatanetworkId(chunkDataRepCubeComponentData[ent].networkId);
         snapshot.SetRepCubeComponentDataposition(chunkDataRepCubeComponentData[ent].position);
+        snapshot.SetRepCubeComponentDatacolor(chunkDataRepCubeComponentData[ent].color);
 
     }
 }

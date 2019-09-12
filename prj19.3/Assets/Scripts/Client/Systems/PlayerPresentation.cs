@@ -38,6 +38,9 @@ public class PlayerPresentation : ComponentSystem
             var transform = EntityManager.GetComponentObject<Transform>(goEnt);
             var cubeData = EntityManager.GetComponentData<RepCubeComponentData>(goEnt);
             transform.position = cubeData.position;
+
+            var renderer = transform.GetComponent<Renderer>();
+            renderer.material.color = new Color(cubeData.color.x, cubeData.color.y, cubeData.color.z);
         }
         goEntities.Dispose();
     }

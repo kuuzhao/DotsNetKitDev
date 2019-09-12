@@ -21,6 +21,11 @@
                     "name": "position",
                     "quantization": 100,
                     "interpolate": true
+                },
+                {
+                    "name": "color",
+                    "quantization": 1000,
+                    "interpolate": false
                 }
             ]
         }
