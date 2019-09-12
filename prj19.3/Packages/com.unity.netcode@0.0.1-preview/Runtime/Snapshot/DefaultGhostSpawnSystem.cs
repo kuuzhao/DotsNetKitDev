@@ -407,9 +407,7 @@ public class DefaultGhostDestroySystem<T> : ComponentSystem
 
     protected override void OnUpdate()
     {
-        // TODO: LZ:
-        //      not use Allocator.Persistent
-        var toBeDestroyedEntities = m_DestroyGroup.ToEntityArray(Allocator.Persistent);
+        var toBeDestroyedEntities = m_DestroyGroup.ToEntityArray(Allocator.TempJob);
         for (int i = 0; i < toBeDestroyedEntities.Length; ++i)
         {
             var toBeDestroyedEntity = toBeDestroyedEntities[i];
@@ -417,7 +415,8 @@ public class DefaultGhostDestroySystem<T> : ComponentSystem
 
             if (tr != null)
                 UnityEngine.Object.Destroy(tr.gameObject);
-
+            else
+                PostUpdateCommands.DestroyEntity(toBeDestroyedEntity);
         }
         toBeDestroyedEntities.Dispose();
     }

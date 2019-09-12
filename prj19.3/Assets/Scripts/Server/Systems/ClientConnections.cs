@@ -32,7 +32,7 @@ public class LoadRemoteLevelSystem : ComponentSystem
             var ent = entities[i];
             var networkId = networkIds[i];
 
-            Console.WriteLine(string.Format("New client({0}) connected.", networkId.Value));
+            Console.WriteLine(string.Format("New client(NetworkId={0}) connected.", networkId.Value));
 
             // Load level RPC
             var rpcLoadLevelQueue = ClientServerSystemManager.serverWorld.GetOrCreateSystem<DotsNetKit193RpcSystem>().GetRpcQueue<RpcLoadLevel>();
@@ -84,6 +84,7 @@ public class EnterGameSystem : ComponentSystem
 
 [DisableAutoCreation]
 [UpdateInGroup(typeof(ServerSimulationSystemGroup))]
+[UpdateAfter(typeof(NetworkStreamReceiveSystem))]
 public class HandleDisconnect : ComponentSystem
 {
     EntityQuery m_NetworkConnection;
@@ -91,17 +92,26 @@ public class HandleDisconnect : ComponentSystem
     {
         m_NetworkConnection = GetEntityQuery(
             ComponentType.ReadWrite<NetworkIdComponent>(),
+            ComponentType.ReadWrite<CommandTargetComponent>(),
             ComponentType.ReadWrite<NetworkStreamDisconnected>());
     }
 
     protected override void OnUpdate()
     {
         var networkIds = m_NetworkConnection.ToComponentDataArray<NetworkIdComponent>(Allocator.TempJob);
+        var ctcs = m_NetworkConnection.ToComponentDataArray<CommandTargetComponent>(Allocator.TempJob);
 
         for (int i = 0; i < networkIds.Length; ++i)
         {
             var networkId = networkIds[i];
-            Debug.Log(string.Format("Client({0}) disconnected.", networkId.Value));
+            var ctc = ctcs[i];
+            Console.WriteLine(string.Format("Client(NetworkId={0}) disconnected.", networkId.Value));
+
+            if (ctc.targetEntity != Entity.Null)
+            {
+                var transform = EntityManager.GetComponentObject<Transform>(ctc.targetEntity);
+                Object.Destroy(transform.gameObject);
+            }
         }
 
         networkIds.Dispose();

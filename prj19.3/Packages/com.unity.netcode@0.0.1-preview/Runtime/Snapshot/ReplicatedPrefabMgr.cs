@@ -3,6 +3,43 @@ using Unity.Entities;
 using System.IO;
 using System.Collections.Generic;
 
+public class EntityMonoBehaviour : MonoBehaviour
+{
+    private EntityManager em;
+    private Entity ent;
+
+    public void BindEntity(EntityManager entityManager, Entity entity)
+    {
+        em = entityManager;
+        ent = entity;
+
+        var components = gameObject.GetComponents<Component>();
+
+        for (var i = 0; i != components.Length; i++)
+        {
+            var com = components[i];
+            var behaviour = com as Behaviour;
+            if (behaviour != null && !behaviour.enabled)
+                continue;
+
+            if (!(com is EntityMonoBehaviour) && com != null)
+            {
+                em.AddComponentObject(ent, com);
+            }
+        }
+    }
+
+    void OnDisable()
+    {
+        if (em != null && em.IsCreated && em.Exists(ent))
+            em.DestroyEntity(ent);
+
+        em = null;
+        ent = Entity.Null;
+    }
+}
+
+
 public class ReplicatedPrefabMgr
 {
     static string abFolder;
@@ -40,13 +77,8 @@ public class ReplicatedPrefabMgr
         if (goName != null)
             go.name = goName;
 
-        // We don't want this GameObjectEntity to be added to World.Active.
-        var oldWorldActive = World.Active;
-        World.Active = null;
-        go.AddComponent<GameObjectEntity>();
-        World.Active = oldWorldActive;
-
-        GameObjectEntity.AddToEntity(em, go, ent);
+        var emb = go.AddComponent<EntityMonoBehaviour>();
+        emb.BindEntity(ecsWorld.EntityManager, ent);
 
         return true;
     }
@@ -57,20 +89,13 @@ public class ReplicatedPrefabMgr
         if (prefab == null)
             return Entity.Null;
 
-        var em = ecsWorld.EntityManager;
-        var ent = em.CreateEntity();
-
         var go = Object.Instantiate(prefab, Vector3.zero, Quaternion.identity);
         if (goName != null)
             go.name = goName;
+        var emb = go.AddComponent<EntityMonoBehaviour>();
 
-        // We don't want this GameObjectEntity to be added to World.Active.
-        var oldWorldActive = World.Active;
-        World.Active = null;
-        go.AddComponent<GameObjectEntity>();
-        World.Active = oldWorldActive;
-
-        GameObjectEntity.AddToEntity(em, go, ent);
+        var ent = ecsWorld.EntityManager.CreateEntity();
+        emb.BindEntity(ecsWorld.EntityManager, ent);
 
         return ent;
     }

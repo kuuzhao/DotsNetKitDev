@@ -142,15 +142,11 @@ namespace Unity.Entities
                 // * OnEnable (Loading object from scene...)
                 if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
                 {
-                    // TODO: LZ:
-                    //      comment this out. I think it's okay to be null.
-#if false
                     // We are just gonna ignore this enter playmode reload.
                     // Can't see a situation where it would be useful to create something inbetween.
                     // But we really need to solve this at the root. The execution order is kind if crazy.
                     if (UnityEditor.EditorApplication.isPlaying)
                         Debug.LogError("Loading GameObjectEntity in Playmode but there is no active World");
-#endif
                 }
                 else
                 {

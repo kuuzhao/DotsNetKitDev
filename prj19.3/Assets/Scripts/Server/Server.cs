@@ -10,6 +10,8 @@ public class Server
     //      simplify the setup here
     public static void Start()
     {
+        // TODO: LZ:
+        //      use 20 fps on the server side
         Application.targetFrameRate = 60;
 
         Debug.Log("ClientServerSystemManager.CollectAllSystems()");
