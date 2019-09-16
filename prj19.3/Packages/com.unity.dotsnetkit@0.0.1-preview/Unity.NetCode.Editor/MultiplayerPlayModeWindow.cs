@@ -12,7 +12,7 @@ namespace Unity.DotsNetKit.NetCode.Editor
 public class MultiplayerPlayModeWindow : EditorWindow
 {
     const string k_PrefsKeyPrefix = "MultiplayerPlayMode";
-    [MenuItem("Multiplayer/PlayMode Tools")]
+    [MenuItem("DotsNetKit/PlayMode Tools")]
     public static void ShowWindow()
     {
         GetWindow<MultiplayerPlayModeWindow>(false, "Multiplayer PlayMode Tools", true);

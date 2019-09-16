@@ -188,7 +188,7 @@ public class /*$GHOST_SYSTEM_PREFIX*/GhostReceiveSystem : GhostReceiveSystem<Gho
                 break;
 ";
 
-        [MenuItem("Multiplayer/CodeGen/GhostCollection Generator")]
+        [MenuItem("DotsNetKit/CodeGen/GhostCollection Generator")]
         public static void ShowWindow()
         {
             GetWindow<GhostCollectionGeneratorWindow>(false, "GhostCollection Generator", true);

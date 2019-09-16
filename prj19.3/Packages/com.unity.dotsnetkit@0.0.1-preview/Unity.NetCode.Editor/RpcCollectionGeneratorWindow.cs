@@ -75,7 +75,7 @@ public class /*$RPC_SYSTEM_PREFIX*/RpcSystem : RpcSystem</*$RPC_COLLECTION_PREFI
 
         private const string RpcTypeTemplate = @"        typeof(/*$RPC_TYPE*/),
 ";
-        [MenuItem("Multiplayer/CodeGen/RpcCollection Generator")]
+        [MenuItem("DotsNetKit/CodeGen/RpcCollection Generator")]
         public static void ShowWindow()
         {
             GetWindow<RpcCollectionGeneratorWindow>(false, "RpcCollection Generator", true);

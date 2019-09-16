@@ -11,7 +11,7 @@ namespace Unity.DotsNetKit.Transport.Editor
 {
     public class PipelineCollectionGeneratorWindow : EditorWindow
     {
-        [MenuItem("Multiplayer/CodeGen/PipelineCollection Generator")]
+        [MenuItem("DotsNetKit/CodeGen/PipelineCollection Generator")]
         public static void ShowWindow()
         {
             GetWindow<PipelineCollectionGeneratorWindow>(false, "PipelineCollection Generator", true);

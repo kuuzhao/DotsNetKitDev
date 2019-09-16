@@ -7,7 +7,7 @@ namespace Unity.DotsNetKit.NetCode.Editor
 {
     public class ReplicatedPrefabUtility
     {
-        [MenuItem("NetCode/BuildReplicatedPrefabs")]
+        [MenuItem("DotsNetKit/BuildReplicatedPrefabs")]
         public static void BuildReplicatedPrefabs()
         {
             var abFolder = GetReplicatedPrefabsFolder();
