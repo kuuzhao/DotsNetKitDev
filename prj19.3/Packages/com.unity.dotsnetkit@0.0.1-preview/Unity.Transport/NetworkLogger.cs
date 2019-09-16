@@ -181,7 +181,7 @@ namespace Unity.DotsNetKit.Transport
         public Concurrent ToConcurrent()
         {
             var concurrent = default(Concurrent);
-            concurrent.m_PendingLog = m_PendingLog.ToConcurrent();
+            concurrent.m_PendingLog = m_PendingLog.AsParallelWriter();
             concurrent.m_Level = m_Level;
             return concurrent;
         }
@@ -205,7 +205,7 @@ namespace Unity.DotsNetKit.Transport
                 m_PendingLog.Enqueue(msg);
             }
 
-            internal NativeQueue<LogMessage>.Concurrent m_PendingLog;
+            internal NativeQueue<LogMessage>.ParallelWriter m_PendingLog;
             internal LogLevel m_Level;
         }
     }

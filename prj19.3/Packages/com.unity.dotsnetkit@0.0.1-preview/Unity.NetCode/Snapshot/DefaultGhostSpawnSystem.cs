@@ -21,7 +21,7 @@ namespace Unity.DotsNetKit.NetCode
         private EntityArchetype m_PredictedArchetype;
         private EntityArchetype m_InitialArchetype;
         private NativeHashMap<int, GhostEntity> m_GhostMap;
-        private NativeHashMap<int, GhostEntity>.Concurrent m_ConcurrentGhostMap;
+        private NativeHashMap<int, GhostEntity>.ParallelWriter m_ConcurrentGhostMap;
         private EntityQuery m_SpawnRequestGroup;
 
         private NativeList<Entity> m_InvalidGhosts;
@@ -42,10 +42,10 @@ namespace Unity.DotsNetKit.NetCode
         private NativeHashMap<int, int> m_PredictionSpawnCleanupMap;
 
         private NativeQueue<DelayedSpawnGhost> m_DelayedSpawnQueue;
-        private NativeQueue<DelayedSpawnGhost>.Concurrent m_ConcurrentDelayedSpawnQueue;
+        private NativeQueue<DelayedSpawnGhost>.ParallelWriter m_ConcurrentDelayedSpawnQueue;
         private NativeList<DelayedSpawnGhost> m_CurrentDelayedSpawnList;
         private NativeQueue<DelayedSpawnGhost> m_PredictedSpawnQueue;
-        private NativeQueue<DelayedSpawnGhost>.Concurrent m_ConcurrentPredictedSpawnQueue;
+        private NativeQueue<DelayedSpawnGhost>.ParallelWriter m_ConcurrentPredictedSpawnQueue;
         // The entities which need to wait to be spawned on the right tick (interpolated)
         private NativeList<DelayedSpawnGhost> m_CurrentPredictedSpawnList;
         private EndSimulationEntityCommandBufferSystem m_Barrier;
@@ -77,17 +77,17 @@ namespace Unity.DotsNetKit.NetCode
             m_InitialArchetype = EntityManager.CreateArchetype(ComponentType.ReadWrite<T>(), ComponentType.ReadWrite<ReplicatedEntityComponent>());
 
             m_GhostMap = World.GetOrCreateSystem<GhostReceiveSystemGroup>().GhostEntityMap;
-            m_ConcurrentGhostMap = m_GhostMap.ToConcurrent();
+            m_ConcurrentGhostMap = m_GhostMap.AsParallelWriter();
             m_SpawnRequestGroup = GetEntityQuery(ComponentType.ReadOnly<T>(),
                 ComponentType.ReadOnly<PredictedSpawnRequestComponent>());
 
             m_InvalidGhosts = new NativeList<Entity>(1024, Allocator.Persistent);
             m_DelayedSpawnQueue = new NativeQueue<DelayedSpawnGhost>(Allocator.Persistent);
             m_CurrentDelayedSpawnList = new NativeList<DelayedSpawnGhost>(1024, Allocator.Persistent);
-            m_ConcurrentDelayedSpawnQueue = m_DelayedSpawnQueue.ToConcurrent();
+            m_ConcurrentDelayedSpawnQueue = m_DelayedSpawnQueue.AsParallelWriter();
             m_PredictedSpawnQueue = new NativeQueue<DelayedSpawnGhost>(Allocator.Persistent);
             m_CurrentPredictedSpawnList = new NativeList<DelayedSpawnGhost>(1024, Allocator.Persistent);
-            m_ConcurrentPredictedSpawnQueue = m_PredictedSpawnQueue.ToConcurrent();
+            m_ConcurrentPredictedSpawnQueue = m_PredictedSpawnQueue.AsParallelWriter();
             m_Barrier = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
 
             m_PredictSpawnGhosts = new NativeList<PredictSpawnGhost>(16, Allocator.Persistent);
@@ -116,13 +116,13 @@ namespace Unity.DotsNetKit.NetCode
             [ReadOnly] public NativeList<T> newGhosts;
             [ReadOnly] public NativeList<int> newGhostIds;
             [NativeDisableParallelForRestriction] public BufferFromEntity<T> snapshotFromEntity;
-            public NativeHashMap<int, GhostEntity>.Concurrent ghostMap;
+            public NativeHashMap<int, GhostEntity>.ParallelWriter ghostMap;
             public int ghostType;
-            public NativeQueue<DelayedSpawnGhost>.Concurrent pendingSpawnQueue;
-            public NativeQueue<DelayedSpawnGhost>.Concurrent predictedSpawnQueue;
+            public NativeQueue<DelayedSpawnGhost>.ParallelWriter pendingSpawnQueue;
+            public NativeQueue<DelayedSpawnGhost>.ParallelWriter predictedSpawnQueue;
             [DeallocateOnJobCompletion] [ReadOnly] public NativeArray<int> predictionMask;
             [ReadOnly] public NativeList<PredictSpawnGhost> predictionSpawnGhosts;
-            public NativeHashMap<int, int>.Concurrent predictionSpawnCleanupMap;
+            public NativeHashMap<int, int>.ParallelWriter predictionSpawnCleanupMap;
             public EntityCommandBuffer.Concurrent commandBuffer;
             public void Execute(int i)
             {
@@ -361,7 +361,7 @@ namespace Unity.DotsNetKit.NetCode
                     predictedSpawnQueue = m_ConcurrentPredictedSpawnQueue,
                     predictionMask = predictionMask,
                     predictionSpawnGhosts = m_PredictSpawnGhosts,
-                    predictionSpawnCleanupMap = m_PredictionSpawnCleanupMap.ToConcurrent(),
+                    predictionSpawnCleanupMap = m_PredictionSpawnCleanupMap.AsParallelWriter(),
                     commandBuffer = m_Barrier.CreateCommandBuffer().ToConcurrent()
                 };
                 inputDeps = job.Schedule(newEntities.Length, 8, inputDeps);

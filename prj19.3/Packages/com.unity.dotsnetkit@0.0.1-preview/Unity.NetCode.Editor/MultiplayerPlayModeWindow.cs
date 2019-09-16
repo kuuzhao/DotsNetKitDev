@@ -114,7 +114,7 @@ public class MultiplayerPlayModeConnectionSystem : ComponentSystem
     private EntityQuery m_clientConnectionGroup;
     private NetworkEndPoint m_prevEndPoint;
 
-    protected override void OnCreateManager()
+    protected override void OnCreate()
     {
         m_clientConnectionGroup = GetEntityQuery(
             ComponentType.ReadWrite<NetworkStreamConnection>(),
@@ -159,7 +159,7 @@ public class MultiplayerPlayModeControllerSystem : ComponentSystem
 {
     public static int PresentedClient;
     private int m_currentPresentedClient;
-    protected override void OnCreateManager()
+    protected override void OnCreate()
     {
         PresentedClient = 0;
         m_currentPresentedClient = 0;

@@ -133,12 +133,12 @@ namespace Unity.DotsNetKit.NetCode
     public class ClientPresentationSystemGroup : ComponentSystemGroup
     {
         private BeginPresentationEntityCommandBufferSystem m_beginBarrier;
-        private EndPresentationEntityCommandBufferSystem m_endBarrier;
+        private BeginInitializationEntityCommandBufferSystem m_endBarrier;
 
         protected override void OnCreate()
         {
             m_beginBarrier = World.GetOrCreateSystem<BeginPresentationEntityCommandBufferSystem>();
-            m_endBarrier = World.GetOrCreateSystem<EndPresentationEntityCommandBufferSystem>();
+            m_endBarrier = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem>();
         }
 
         protected List<ComponentSystemBase> m_systemsInGroup = new List<ComponentSystemBase>();

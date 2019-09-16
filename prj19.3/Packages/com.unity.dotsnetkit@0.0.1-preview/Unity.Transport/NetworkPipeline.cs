@@ -112,7 +112,7 @@ namespace Unity.DotsNetKit.Transport
                 m_StageCollection = m_StageCollection,
                 m_Pipelines = m_Pipelines,
                 m_StageList = m_StageList,
-                m_SendStageNeedsUpdateWrite = m_SendStageNeedsUpdateRead.ToConcurrent(),
+                m_SendStageNeedsUpdateWrite = m_SendStageNeedsUpdateRead.AsParallelWriter(),
                 sizePerConnection = sizePerConnection,
                 sendBuffer = m_SendBuffer,
                 sharedBuffer = m_SharedBuffer,
@@ -126,7 +126,7 @@ namespace Unity.DotsNetKit.Transport
             internal TNetworkPipelineStageCollection m_StageCollection;
             [ReadOnly] internal NativeList<PipelineImpl> m_Pipelines;
             [ReadOnly] internal NativeList<int> m_StageList;
-            internal NativeQueue<UpdatePipeline>.Concurrent m_SendStageNeedsUpdateWrite;
+            internal NativeQueue<UpdatePipeline>.ParallelWriter m_SendStageNeedsUpdateWrite;
             [ReadOnly] internal NativeArray<int> sizePerConnection;
             // TODO: not really read-only, just hacking the safety system
             [ReadOnly] internal NativeList<byte> sharedBuffer;

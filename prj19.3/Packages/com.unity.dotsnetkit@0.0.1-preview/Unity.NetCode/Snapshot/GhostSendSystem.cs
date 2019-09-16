@@ -168,7 +168,7 @@ namespace Unity.DotsNetKit.NetCode
             public uint currentTick;
             [DeallocateOnJobCompletion] [ReadOnly] public NativeArray<uint> tick;
             public EntityCommandBuffer.Concurrent commandBuffer;
-            public NativeQueue<int>.Concurrent freeGhostIds;
+            public NativeQueue<int>.ParallelWriter freeGhostIds;
             public ComponentType ghostStateType;
             public void Execute(Entity entity, int index, ref GhostSystemStateComponent ghost)
             {
@@ -564,7 +564,7 @@ namespace Unity.DotsNetKit.NetCode
                 currentTick = currentTick,
                 tick = ackedByAll,
                 commandBuffer = commandBuffer.ToConcurrent(),
-                freeGhostIds = m_FreeGhostIds.ToConcurrent(),
+                freeGhostIds = m_FreeGhostIds.AsParallelWriter(),
                 ghostStateType = ComponentType.ReadWrite<GhostSystemStateComponent>()
             };
             inputDeps = ghostCleanupJob.Schedule(this, inputDeps);

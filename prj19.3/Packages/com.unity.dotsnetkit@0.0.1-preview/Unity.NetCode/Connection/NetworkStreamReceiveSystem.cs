@@ -179,7 +179,7 @@ namespace Unity.DotsNetKit.NetCode
         {
             public EntityCommandBuffer.Concurrent commandBuffer;
             public UdpNetworkDriver.Concurrent driver;
-            public NativeQueue<int>.Concurrent freeNetworkIds;
+            public NativeQueue<int>.ParallelWriter freeNetworkIds;
             [ReadOnly] public ComponentDataFromEntity<NetworkIdComponent> networkId;
             public BufferFromEntity<IncomingRpcDataStreamBufferComponent> rpcBuffer;
             public BufferFromEntity<IncomingCommandDataStreamBufferComponent> cmdBuffer;
@@ -277,7 +277,7 @@ namespace Unity.DotsNetKit.NetCode
 
         protected override JobHandle OnUpdate(JobHandle inputDeps)
         {
-            var concurrentFreeQueue = freeNetworkIds.ToConcurrent();
+            var concurrentFreeQueue = freeNetworkIds.AsParallelWriter();
             inputDeps = m_Driver.ScheduleUpdate(inputDeps);
             if (m_DriverListening)
             {

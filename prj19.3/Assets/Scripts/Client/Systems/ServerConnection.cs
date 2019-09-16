@@ -10,7 +10,7 @@ public class ServerConnection : ComponentSystem
     public static int sNetworkId = -1;
 
     EntityQuery connectionQuery;
-    protected override void OnCreateManager()
+    protected override void OnCreate()
     {
         connectionQuery = GetEntityQuery(
             typeof(NetworkIdComponent),
