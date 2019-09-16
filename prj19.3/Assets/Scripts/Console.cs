@@ -15,12 +15,12 @@ public class Console : MonoBehaviour
         lines = new List<string>();
         DontDestroyOnLoad(transform.root);
 
-        WriteLine("~ to toggle the console");
+        WriteLine("F1 to toggle the console");
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.BackQuote))
+        if (Input.GetKeyDown(KeyCode.F1))
         {
             text.gameObject.SetActive(!text.gameObject.activeSelf);
         }
