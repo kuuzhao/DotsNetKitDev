@@ -3,7 +3,7 @@ using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Random = Unity.Mathematics.Random;
 
-namespace Unity.Networking.Transport.Utilities
+namespace Unity.DotsNetKit.Transport.Utilities
 {
     public struct SimulatorUtility
     {

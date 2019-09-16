@@ -19,7 +19,7 @@ public class Client
 
         ClientServerSystemManager.InitClientSystems();
 
-        Unity.Networking.Transport.NetworkEndPoint ep = Unity.Networking.Transport.NetworkEndPoint.Parse("127.0.0.1",
+        Unity.DotsNetKit.Transport.NetworkEndPoint ep = Unity.DotsNetKit.Transport.NetworkEndPoint.Parse("127.0.0.1",
             12345);
         World clientWorld = ClientServerSystemManager.clientWorld;
         Entity ent = clientWorld.GetExistingSystem<NetworkStreamReceiveSystem>().Connect(ep);

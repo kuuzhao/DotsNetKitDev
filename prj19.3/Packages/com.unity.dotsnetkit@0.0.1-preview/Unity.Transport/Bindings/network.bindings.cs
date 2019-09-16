@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace Unity.Networking.Transport
+namespace Unity.DotsNetKit.Transport
 {
     [StructLayout(LayoutKind.Sequential)]
     public unsafe struct network_iovec

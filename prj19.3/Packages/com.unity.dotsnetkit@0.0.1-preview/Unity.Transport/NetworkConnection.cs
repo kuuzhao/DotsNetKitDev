@@ -1,4 +1,4 @@
-namespace Unity.Networking.Transport
+namespace Unity.DotsNetKit.Transport
 {
     /// <summary>
     /// The NetworkConnection is a struct that hold all information needed by the driver to link it with a virtual

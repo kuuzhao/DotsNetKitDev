@@ -1,6 +1,6 @@
 using System;
 using Unity.Entities;
-using Unity.Networking.Transport;
+using Unity.DotsNetKit.Transport;
 
 internal struct InternalRpcCollection
 {

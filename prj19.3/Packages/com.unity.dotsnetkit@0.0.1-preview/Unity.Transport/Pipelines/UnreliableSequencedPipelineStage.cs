@@ -2,9 +2,9 @@ using System;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
-using Unity.Networking.Transport.Utilities;
+using Unity.DotsNetKit.Transport.Utilities;
 
-namespace Unity.Networking.Transport
+namespace Unity.DotsNetKit.Transport
 {
     public struct UnreliableSequencedPipelineStage : INetworkPipelineStage
     {

@@ -1,8 +1,8 @@
 ﻿using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
-using Unity.Networking.Transport.Utilities;
+using Unity.DotsNetKit.Transport.Utilities;
 
-namespace Unity.Networking.Transport
+namespace Unity.DotsNetKit.Transport
 {
     [NetworkPipelineInitilize(typeof(SimulatorUtility.Parameters))]
     public struct SimulatorPipelineStage : INetworkPipelineStage

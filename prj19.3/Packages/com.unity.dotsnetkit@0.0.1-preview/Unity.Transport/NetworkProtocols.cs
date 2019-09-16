@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Unity.Networking.Transport.Protocols
+namespace Unity.DotsNetKit.Transport.Protocols
 {
     public enum UdpCProtocol
     {

@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using Unity.Collections.LowLevel.Unsafe;
 
-namespace Unity.Networking.Transport
+namespace Unity.DotsNetKit.Transport
 {
     /// <summary>
     /// NetworkFamily indicates what type of underlying medium we are using.

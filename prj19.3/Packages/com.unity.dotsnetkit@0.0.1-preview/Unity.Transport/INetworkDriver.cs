@@ -1,7 +1,7 @@
 using System;
 using Unity.Jobs;
 
-namespace Unity.Networking.Transport
+namespace Unity.DotsNetKit.Transport
 {
     /// <summary>
     /// The NetworkDriver interface is the main entry point for the transport.

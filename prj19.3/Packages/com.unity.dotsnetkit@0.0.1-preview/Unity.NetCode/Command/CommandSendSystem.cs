@@ -2,8 +2,8 @@ using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
 using Unity.Jobs;
-using Unity.Networking.Transport;
-using Unity.Networking.Transport.LowLevel.Unsafe;
+using Unity.DotsNetKit.Transport;
+using Unity.DotsNetKit.Transport.LowLevel.Unsafe;
 
 [UpdateInGroup(typeof(ClientSimulationSystemGroup))]
 // dependency just for acking

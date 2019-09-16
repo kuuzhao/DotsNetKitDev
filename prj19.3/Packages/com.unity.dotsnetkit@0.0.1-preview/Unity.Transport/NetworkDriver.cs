@@ -1,15 +1,15 @@
 using System;
 using System.Diagnostics;
 using Unity.Burst;
-using Unity.Networking.Transport.LowLevel.Unsafe;
+using Unity.DotsNetKit.Transport.LowLevel.Unsafe;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
-using Unity.Networking.Transport.Protocols;
+using Unity.DotsNetKit.Transport.Protocols;
 using Unity.Jobs;
 using UnityEngine.Assertions;
 using Random = System.Random;
 
-namespace Unity.Networking.Transport
+namespace Unity.DotsNetKit.Transport
 {
     /// <summary>
     /// The GenericNetworkDriver is an implementation of Virtual Connections over any transport.

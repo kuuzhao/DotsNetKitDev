@@ -1,7 +1,7 @@
 using System;
 using Unity.Collections;
 
-namespace Unity.Networking.Transport
+namespace Unity.DotsNetKit.Transport
 {
     public struct NetworkCompressionModel : IDisposable
     {

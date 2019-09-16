@@ -4,11 +4,11 @@ using System.IO;
 #endif
 using System.Runtime.InteropServices;
 using Unity.Collections;
-using Unity.Networking.Transport.Utilities;
+using Unity.DotsNetKit.Transport.Utilities;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Jobs;
 
-namespace Unity.Networking.Transport
+namespace Unity.DotsNetKit.Transport
 {
     public struct IPCManager
     {

@@ -1,6 +1,6 @@
 using Unity.Collections;
 using Unity.Entities;
-using Unity.Networking.Transport;
+using Unity.DotsNetKit.Transport;
 
 public interface IGhostSerializerCollection
 {

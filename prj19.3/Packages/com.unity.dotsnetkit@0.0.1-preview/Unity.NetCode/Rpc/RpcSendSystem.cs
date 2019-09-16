@@ -2,7 +2,7 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
-using Unity.Networking.Transport;
+using Unity.DotsNetKit.Transport;
 
 [DisableAutoCreation]
 [UpdateInGroup(typeof(ClientAndServerSimulationSystemGroup))]

@@ -3,9 +3,9 @@ using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
 using Unity.Jobs;
-using Unity.Networking.Transport;
-using Unity.Networking.Transport.LowLevel.Unsafe;
-using Unity.Networking.Transport.Utilities;
+using Unity.DotsNetKit.Transport;
+using Unity.DotsNetKit.Transport.LowLevel.Unsafe;
+using Unity.DotsNetKit.Transport.Utilities;
 
 [DisableAutoCreation]
 [UpdateInGroup(typeof(ClientAndServerSimulationSystemGroup))]

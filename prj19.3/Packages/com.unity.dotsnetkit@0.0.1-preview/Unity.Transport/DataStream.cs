@@ -2,9 +2,9 @@
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using System;
-using Unity.Networking.Transport.LowLevel.Unsafe;
+using Unity.DotsNetKit.Transport.LowLevel.Unsafe;
 
-namespace Unity.Networking.Transport
+namespace Unity.DotsNetKit.Transport
 {
     [StructLayout(LayoutKind.Explicit)]
     internal struct UIntFloat
@@ -969,7 +969,7 @@ namespace Unity.Networking.Transport
     }
 }
 
-namespace Unity.Networking.Transport.LowLevel.Unsafe
+namespace Unity.DotsNetKit.Transport.LowLevel.Unsafe
 {
     /// <summary>
     /// DataStream (Reader/Writer) unsafe utilities used to do pointer operations on streams.

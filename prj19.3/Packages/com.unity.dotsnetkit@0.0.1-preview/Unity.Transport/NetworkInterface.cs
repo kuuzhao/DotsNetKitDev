@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using Unity.Burst;
-using Unity.Networking.Transport.LowLevel.Unsafe;
-using Unity.Networking.Transport.Protocols;
+using Unity.DotsNetKit.Transport.LowLevel.Unsafe;
+using Unity.DotsNetKit.Transport.Protocols;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Jobs;
 
-namespace Unity.Networking.Transport
+namespace Unity.DotsNetKit.Transport
 {
 #if UNITY_ZEROPLAYER
     public class NetworkInterfaceException : Exception

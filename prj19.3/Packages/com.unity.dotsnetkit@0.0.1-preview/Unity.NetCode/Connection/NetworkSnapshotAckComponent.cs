@@ -1,5 +1,5 @@
 using Unity.Entities;
-using Unity.Networking.Transport.Utilities;
+using Unity.DotsNetKit.Transport.Utilities;
 
 public struct NetworkSnapshotAckComponent : IComponentData
 {

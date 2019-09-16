@@ -3,7 +3,7 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
-using Unity.Networking.Transport.Utilities;
+using Unity.DotsNetKit.Transport.Utilities;
 
 [UpdateInGroup(typeof(GhostSpawnSystemGroup))]
 [AlwaysUpdateSystem]

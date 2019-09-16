@@ -10,7 +10,7 @@ public class RpcCollectionGeneratorWindow : EditorWindow
 {
     private const string RpcCollectionTemplate = @"using System;
 using Unity.Entities;
-using Unity.Networking.Transport;
+using Unity.DotsNetKit.Transport;
 
 public struct /*$RPC_COLLECTION_PREFIX*/RpcCollection : IRpcCollection
 {

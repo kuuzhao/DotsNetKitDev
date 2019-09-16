@@ -22,7 +22,7 @@ public class Server
 
         ClientServerSystemManager.InitServerSystems();
 
-        Unity.Networking.Transport.NetworkEndPoint ep = Unity.Networking.Transport.NetworkEndPoint.AnyIpv4;
+        Unity.DotsNetKit.Transport.NetworkEndPoint ep = Unity.DotsNetKit.Transport.NetworkEndPoint.AnyIpv4;
         ep.Port = 12345;
         World serverWorld = ClientServerSystemManager.serverWorld;
         var nsrs = serverWorld.GetExistingSystem<NetworkStreamReceiveSystem>();

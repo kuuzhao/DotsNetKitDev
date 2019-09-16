@@ -11,7 +11,7 @@ public class GhostCollectionGeneratorWindow : EditorWindow
     private const string GhostSerializerCollectionTemplate = @"using System;
 using Unity.Collections;
 using Unity.Entities;
-using Unity.Networking.Transport;
+using Unity.DotsNetKit.Transport;
 public struct /*$GHOST_COLLECTION_PREFIX*/GhostSerializerCollection : IGhostSerializerCollection
 {
     public int FindSerializer(EntityArchetype arch)
@@ -79,7 +79,7 @@ public class /*$GHOST_SYSTEM_PREFIX*/GhostSendSystem : GhostSendSystem<GhostSeri
     private const string GhostDeserializerCollectionTemplate = @"using System;
 using Unity.Collections;
 using Unity.Entities;
-using Unity.Networking.Transport;
+using Unity.DotsNetKit.Transport;
 public struct /*$GHOST_COLLECTION_PREFIX*/GhostDeserializerCollection : IGhostDeserializerCollection
 {
 #if ENABLE_UNITY_COLLECTIONS_CHECKS

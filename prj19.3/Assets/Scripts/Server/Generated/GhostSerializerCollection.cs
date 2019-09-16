@@ -1,7 +1,7 @@
 using System;
 using Unity.Collections;
 using Unity.Entities;
-using Unity.Networking.Transport;
+using Unity.DotsNetKit.Transport;
 public struct GhostSerializerCollection : IGhostSerializerCollection
 {
     public int FindSerializer(EntityArchetype arch)

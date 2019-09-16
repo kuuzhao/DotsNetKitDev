@@ -1,7 +1,7 @@
 using System;
 using Unity.Collections;
 
-namespace Unity.Networking.Transport.Utilities
+namespace Unity.DotsNetKit.Transport.Utilities
 {
     /// <summary>
     /// A NativeMultiQueue is a set of several FIFO queues split into buckets.

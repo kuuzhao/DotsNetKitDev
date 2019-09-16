@@ -221,7 +221,7 @@ public class GhostImporterEditor : ScriptedImporterEditor
     }
 
     private const string k_SnapshotDataTemplate = @"using Unity.Mathematics;
-using Unity.Networking.Transport;
+using Unity.DotsNetKit.Transport;
 
 public struct $(GHOSTNAME)SnapshotData : ISnapshotData<$(GHOSTNAME)SnapshotData>
 {
@@ -519,7 +519,8 @@ using Unity.Transforms;
 public class $(GHOSTNAME)GhostUpdateSystem : JobComponentSystem
 {
     // TODO: LZ:
-    //    turn it off, because of the error : Loading a managed string literal is not supported by burst    //    at RepGameModeSnapshotData.GetRepGameModegameTimerMessage
+    //    turn it off, because of the error : Loading a managed string literal is not supported by burst
+    //    at RepGameModeSnapshotData.GetRepGameModegameTimerMessage
     // [BurstCompile]
     [RequireComponentTag(typeof($(GHOSTNAME)SnapshotData))]
     [ExcludeComponent(typeof(PredictedEntityComponent))]
@@ -537,7 +538,8 @@ $(GHOSTINTERPOLATEDASSIGNMENTS)
         }
     }
     // TODO: LZ:
-    //    turn it off, because of the error : Loading a managed string literal is not supported by burst    //    at RepGameModeSnapshotData.GetRepGameModegameTimerMessage
+    //    turn it off, because of the error : Loading a managed string literal is not supported by burst
+    //    at RepGameModeSnapshotData.GetRepGameModegameTimerMessage
     // [BurstCompile]
     [RequireComponentTag(typeof($(GHOSTNAME)SnapshotData), typeof(PredictedEntityComponent))]
     struct UpdatePredictedJob : IJobForEachWithEntity<$(GHOSTPREDICTEDCOMPONENTTYPES)>

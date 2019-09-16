@@ -9,7 +9,7 @@
  */
 
 using Unity.Entities;
-using Unity.Networking.Transport;
+using Unity.DotsNetKit.Transport;
 
 public struct NetworkStreamConnection : IComponentData
 {

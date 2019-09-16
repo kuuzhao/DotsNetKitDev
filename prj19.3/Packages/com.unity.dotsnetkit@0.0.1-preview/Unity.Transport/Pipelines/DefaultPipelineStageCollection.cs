@@ -1,8 +1,8 @@
 ﻿using System;
 using Unity.Collections;
-using Unity.Networking.Transport.Utilities;
+using Unity.DotsNetKit.Transport.Utilities;
 
-namespace Unity.Networking.Transport
+namespace Unity.DotsNetKit.Transport
 {
     public struct NullPipelineStageCollection : INetworkPipelineStageCollection
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Unity.Networking.Transport;
+using Unity.DotsNetKit.Transport;
 using UnityEditor;
 using UnityEngine;
 
@@ -44,7 +44,7 @@ public class PipelineCollectionGeneratorWindow : EditorWindow
 
             var content = @"using System;
 using Unity.Collections;
-using Unity.Networking.Transport;
+using Unity.DotsNetKit.Transport;
 public struct PipelineStageCollection : INetworkPipelineStageCollection
 {
 ";

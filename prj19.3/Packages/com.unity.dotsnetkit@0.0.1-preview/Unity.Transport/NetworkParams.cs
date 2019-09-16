@@ -1,4 +1,4 @@
-namespace Unity.Networking.Transport
+namespace Unity.DotsNetKit.Transport
 {
     /// <summary>
     /// The interface for NetworkParameters

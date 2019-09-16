@@ -1,6 +1,6 @@
 using Unity.Entities;
-using Unity.Networking.Transport;
-using Unity.Networking.Transport.Utilities;
+using Unity.DotsNetKit.Transport;
+using Unity.DotsNetKit.Transport.Utilities;
 
 public interface ICommandData<T> : IBufferElementData where T: struct, ICommandData<T>
 {

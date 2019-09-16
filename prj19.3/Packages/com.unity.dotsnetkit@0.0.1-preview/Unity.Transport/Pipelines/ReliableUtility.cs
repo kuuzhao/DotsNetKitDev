@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 
-namespace Unity.Networking.Transport.Utilities
+namespace Unity.DotsNetKit.Transport.Utilities
 {
     public struct SequenceBufferContext
     {

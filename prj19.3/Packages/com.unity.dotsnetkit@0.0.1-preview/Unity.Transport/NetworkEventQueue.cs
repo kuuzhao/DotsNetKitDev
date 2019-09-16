@@ -3,7 +3,7 @@ using System.Threading;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 
-namespace Unity.Networking.Transport
+namespace Unity.DotsNetKit.Transport
 {
     public struct NetworkEvent
     {

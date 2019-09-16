@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Entities;
-using Unity.Networking.Transport;
+using Unity.DotsNetKit.Transport;
 using UnityEngine.SceneManagement;
 
 public struct RpcLoadLevel : IRpcCommand
