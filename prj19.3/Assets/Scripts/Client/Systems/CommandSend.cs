@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.DotsNetKit.NetCode;
 using UnityEngine;
 
 [DisableAutoCreation]

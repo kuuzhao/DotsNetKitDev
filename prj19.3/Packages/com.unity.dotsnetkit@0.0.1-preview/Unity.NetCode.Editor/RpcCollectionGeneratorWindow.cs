@@ -6,11 +6,14 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-public class RpcCollectionGeneratorWindow : EditorWindow
+namespace Unity.DotsNetKit.NetCode.Editor
 {
-    private const string RpcCollectionTemplate = @"using System;
+    public class RpcCollectionGeneratorWindow : EditorWindow
+    {
+        private const string RpcCollectionTemplate = @"using System;
 using Unity.Entities;
 using Unity.DotsNetKit.Transport;
+using Unity.DotsNetKit.NetCode;
 
 public struct /*$RPC_COLLECTION_PREFIX*/RpcCollection : IRpcCollection
 {
@@ -51,7 +54,7 @@ public class /*$RPC_SYSTEM_PREFIX*/RpcSystem : RpcSystem</*$RPC_COLLECTION_PREFI
 }
 ";
 
-    private const string RpcCaseTemplate = @"            case /*$RPC_CASE_NUM*/:
+        private const string RpcCaseTemplate = @"            case /*$RPC_CASE_NUM*/:
             {
                 var tmp = new /*$RPC_CASE_TYPE*/();
                 tmp.Deserialize(reader, ref ctx);
@@ -60,7 +63,7 @@ public class /*$RPC_SYSTEM_PREFIX*/RpcSystem : RpcSystem</*$RPC_COLLECTION_PREFI
             }
 ";
 
-    private const string RpcStCaseTemplate = @"            case /*$RPC_CASE_NUM*/:
+        private const string RpcStCaseTemplate = @"            case /*$RPC_CASE_NUM*/:
             {
                 var tmp = new /*$RPC_CASE_TYPE*/();
                 tmp.Deserialize(reader, ref ctx);
@@ -70,95 +73,96 @@ public class /*$RPC_SYSTEM_PREFIX*/RpcSystem : RpcSystem</*$RPC_COLLECTION_PREFI
 ";
 
 
-    private const string RpcTypeTemplate = @"        typeof(/*$RPC_TYPE*/),
+        private const string RpcTypeTemplate = @"        typeof(/*$RPC_TYPE*/),
 ";
-    [MenuItem("Multiplayer/CodeGen/RpcCollection Generator")]
-    public static void ShowWindow()
-    {
-        GetWindow<RpcCollectionGeneratorWindow>(false, "RpcCollection Generator", true);
-    }
-
-    class RpcType
-    {
-        public Type type;
-        public bool generate;
-    }
-    private List<RpcType> m_RpcTypes;
-    public RpcCollectionGeneratorWindow()
-    {
-        m_RpcTypes = new List<RpcType>();
-    }
-
-    private void OnGUI()
-    {
-        if (GUILayout.Button("Scan for Rpcs"))
+        [MenuItem("Multiplayer/CodeGen/RpcCollection Generator")]
+        public static void ShowWindow()
         {
-            FindAllRpcs();
+            GetWindow<RpcCollectionGeneratorWindow>(false, "RpcCollection Generator", true);
         }
 
-        for (int i = 0; i < m_RpcTypes.Count; ++i)
+        class RpcType
         {
-            m_RpcTypes[i].generate = GUILayout.Toggle(m_RpcTypes[i].generate, m_RpcTypes[i].type.Name);
+            public Type type;
+            public bool generate;
+        }
+        private List<RpcType> m_RpcTypes;
+        public RpcCollectionGeneratorWindow()
+        {
+            m_RpcTypes = new List<RpcType>();
         }
 
-        if (GUILayout.Button("Generate Collection"))
+        private void OnGUI()
         {
-            var dstFile = EditorUtility.SaveFilePanel("Select file to save", "", "RpcCollection", "cs");
+            if (GUILayout.Button("Scan for Rpcs"))
+            {
+                FindAllRpcs();
+            }
 
-            string rpcCases = "";
-            string rpcStCases = "";
-            string rpcTypes = "";
             for (int i = 0; i < m_RpcTypes.Count; ++i)
             {
-                if (m_RpcTypes[i].generate)
+                m_RpcTypes[i].generate = GUILayout.Toggle(m_RpcTypes[i].generate, m_RpcTypes[i].type.Name);
+            }
+
+            if (GUILayout.Button("Generate Collection"))
+            {
+                var dstFile = EditorUtility.SaveFilePanel("Select file to save", "", "RpcCollection", "cs");
+
+                string rpcCases = "";
+                string rpcStCases = "";
+                string rpcTypes = "";
+                for (int i = 0; i < m_RpcTypes.Count; ++i)
                 {
-                    rpcCases += RpcCaseTemplate
-                        .Replace("/*$RPC_CASE_NUM*/", i.ToString())
-                        .Replace("/*$RPC_CASE_TYPE*/", m_RpcTypes[i].type.Name);
-                    rpcStCases += RpcStCaseTemplate
-                        .Replace("/*$RPC_CASE_NUM*/", i.ToString())
-                        .Replace("/*$RPC_CASE_TYPE*/", m_RpcTypes[i].type.Name);
+                    if (m_RpcTypes[i].generate)
+                    {
+                        rpcCases += RpcCaseTemplate
+                            .Replace("/*$RPC_CASE_NUM*/", i.ToString())
+                            .Replace("/*$RPC_CASE_TYPE*/", m_RpcTypes[i].type.Name);
+                        rpcStCases += RpcStCaseTemplate
+                            .Replace("/*$RPC_CASE_NUM*/", i.ToString())
+                            .Replace("/*$RPC_CASE_TYPE*/", m_RpcTypes[i].type.Name);
 
-                    rpcTypes += RpcTypeTemplate.Replace("/*$RPC_TYPE*/", m_RpcTypes[i].type.Name);
+                        rpcTypes += RpcTypeTemplate.Replace("/*$RPC_TYPE*/", m_RpcTypes[i].type.Name);
+                    }
                 }
-            }
 
-            string content = RpcCollectionTemplate
-                .Replace("/*$RPC_TYPE_CASES*/", rpcCases)
-                .Replace("/*$RPC_TYPE_ST_CASES*/", rpcStCases)
-                .Replace("/*$RPC_TYPE_LIST*/", rpcTypes)
-                .Replace("/*$RPC_COLLECTION_PREFIX*/", "")
-                .Replace("/*$RPC_SYSTEM_PREFIX*/", Application.productName);
-            File.WriteAllText(dstFile, content);
+                string content = RpcCollectionTemplate
+                    .Replace("/*$RPC_TYPE_CASES*/", rpcCases)
+                    .Replace("/*$RPC_TYPE_ST_CASES*/", rpcStCases)
+                    .Replace("/*$RPC_TYPE_LIST*/", rpcTypes)
+                    .Replace("/*$RPC_COLLECTION_PREFIX*/", "")
+                    .Replace("/*$RPC_SYSTEM_PREFIX*/", Application.productName);
+                File.WriteAllText(dstFile, content);
+            }
         }
-    }
-    void FindAllRpcs()
-    {
-        m_RpcTypes.Clear();
-        foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+        void FindAllRpcs()
         {
-            IEnumerable<Type> allTypes;
-
-            try
+            m_RpcTypes.Clear();
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
-                allTypes = assembly.GetTypes();
+                IEnumerable<Type> allTypes;
 
-            }
-            catch (ReflectionTypeLoadException e)
-            {
-                allTypes = e.Types.Where(t => t != null);
-                Debug.LogWarning(
-                    $"RpcCollectionGenerator failed loading assembly: {(assembly.IsDynamic ? assembly.ToString() : assembly.Location)}");
-            }
+                try
+                {
+                    allTypes = assembly.GetTypes();
 
-            var pipelineTypes = allTypes.Where(t =>
-                typeof(IRpcCommand).IsAssignableFrom(t) &&
-                !t.IsAbstract && t.IsPublic &&
-                !t.ContainsGenericParameters);
+                }
+                catch (ReflectionTypeLoadException e)
+                {
+                    allTypes = e.Types.Where(t => t != null);
+                    Debug.LogWarning(
+                        $"RpcCollectionGenerator failed loading assembly: {(assembly.IsDynamic ? assembly.ToString() : assembly.Location)}");
+                }
 
-            foreach (var pt in pipelineTypes)
-            {
-                m_RpcTypes.Add(new RpcType {type = pt, generate = true});
+                var pipelineTypes = allTypes.Where(t =>
+                    typeof(IRpcCommand).IsAssignableFrom(t) &&
+                    !t.IsAbstract && t.IsPublic &&
+                    !t.ContainsGenericParameters);
+
+                foreach (var pt in pipelineTypes)
+                {
+                    m_RpcTypes.Add(new RpcType { type = pt, generate = true });
+                }
             }
         }
     }

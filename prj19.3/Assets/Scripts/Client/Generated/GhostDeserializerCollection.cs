@@ -2,6 +2,7 @@ using System;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.DotsNetKit.Transport;
+using Unity.DotsNetKit.NetCode;
 public struct GhostDeserializerCollection : IGhostDeserializerCollection
 {
 #if ENABLE_UNITY_COLLECTIONS_CHECKS

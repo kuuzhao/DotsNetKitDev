@@ -1,6 +1,7 @@
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
 using Unity.Transforms;
+using Unity.DotsNetKit.NetCode;
 
 public struct RepCubeGhostSerializer : IGhostSerializer<RepCubeSnapshotData>
 {

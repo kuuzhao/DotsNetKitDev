@@ -1,31 +1,34 @@
 using Unity.Entities;
 using Unity.DotsNetKit.Transport;
 
-public struct NetworkIdComponent : IComponentData
+namespace Unity.DotsNetKit.NetCode
 {
-    public int Value;
-}
-
-internal struct RpcSetNetworkId : IRpcCommand
-{
-    public int nid;
-    public void Execute(Entity connection, EntityCommandBuffer.Concurrent commandBuffer, int jobIndex)
+    public struct NetworkIdComponent : IComponentData
     {
-        commandBuffer.AddComponent(jobIndex, connection, new NetworkIdComponent {Value = nid});
+        public int Value;
     }
 
-    public void Execute(Entity connection, EntityCommandBuffer commandBuffer)
+    internal struct RpcSetNetworkId : IRpcCommand
     {
-        commandBuffer.AddComponent(connection, new NetworkIdComponent { Value = nid });
-    }
+        public int nid;
+        public void Execute(Entity connection, EntityCommandBuffer.Concurrent commandBuffer, int jobIndex)
+        {
+            commandBuffer.AddComponent(jobIndex, connection, new NetworkIdComponent { Value = nid });
+        }
 
-    public void Serialize(DataStreamWriter writer)
-    {
-        writer.Write(nid);
-    }
+        public void Execute(Entity connection, EntityCommandBuffer commandBuffer)
+        {
+            commandBuffer.AddComponent(connection, new NetworkIdComponent { Value = nid });
+        }
 
-    public void Deserialize(DataStreamReader reader, ref DataStreamReader.Context ctx)
-    {
-        nid = reader.ReadInt(ref ctx);
+        public void Serialize(DataStreamWriter writer)
+        {
+            writer.Write(nid);
+        }
+
+        public void Deserialize(DataStreamReader reader, ref DataStreamReader.Context ctx)
+        {
+            nid = reader.ReadInt(ref ctx);
+        }
     }
 }

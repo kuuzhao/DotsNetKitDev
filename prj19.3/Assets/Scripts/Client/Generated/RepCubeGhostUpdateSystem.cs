@@ -3,13 +3,15 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Transforms;
+using Unity.DotsNetKit.NetCode;
 
 [DisableAutoCreation]
 [UpdateInGroup(typeof(GhostUpdateSystemGroup))]
 public class RepCubeGhostUpdateSystem : JobComponentSystem
 {
     // TODO: LZ:
-    //    turn it off, because of the error : Loading a managed string literal is not supported by burst    //    at RepGameModeSnapshotData.GetRepGameModegameTimerMessage
+    //    turn it off, because of the error : Loading a managed string literal is not supported by burst
+    //    at RepGameModeSnapshotData.GetRepGameModegameTimerMessage
     // [BurstCompile]
     [RequireComponentTag(typeof(RepCubeSnapshotData))]
     [ExcludeComponent(typeof(PredictedEntityComponent))]
@@ -31,7 +33,8 @@ public class RepCubeGhostUpdateSystem : JobComponentSystem
         }
     }
     // TODO: LZ:
-    //    turn it off, because of the error : Loading a managed string literal is not supported by burst    //    at RepGameModeSnapshotData.GetRepGameModegameTimerMessage
+    //    turn it off, because of the error : Loading a managed string literal is not supported by burst
+    //    at RepGameModeSnapshotData.GetRepGameModegameTimerMessage
     // [BurstCompile]
     [RequireComponentTag(typeof(RepCubeSnapshotData), typeof(PredictedEntityComponent))]
     struct UpdatePredictedJob : IJobForEachWithEntity<RepCubeComponentData>

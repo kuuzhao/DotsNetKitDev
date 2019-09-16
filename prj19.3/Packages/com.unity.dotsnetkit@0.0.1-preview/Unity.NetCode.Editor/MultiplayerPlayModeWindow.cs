@@ -7,6 +7,8 @@ using UnityEngine;
 
 #if false
 
+namespace Unity.DotsNetKit.NetCode.Editor
+{
 public class MultiplayerPlayModeWindow : EditorWindow
 {
     const string k_PrefsKeyPrefix = "MultiplayerPlayMode";
@@ -181,5 +183,6 @@ public class MultiplayerPlayModeControllerSystem : ComponentSystem
             m_currentPresentedClient = PresentedClient;
         }
     }
+}
 }
 #endif

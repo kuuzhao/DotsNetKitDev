@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Entities;
 using Unity.Collections;
+using Unity.DotsNetKit.NetCode;
 
 [DisableAutoCreation]
 [UpdateInGroup(typeof(ClientPresentationSystemGroup))]

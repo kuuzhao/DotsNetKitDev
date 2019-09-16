@@ -1,7 +1,10 @@
 using Unity.Entities;
 
-public struct CommandTargetComponent : IComponentData
+namespace Unity.DotsNetKit.NetCode
 {
-    public Entity targetEntity;
+    public struct CommandTargetComponent : IComponentData
+    {
+        public Entity targetEntity;
+    }
 }
 

@@ -11,27 +11,29 @@
 using Unity.Entities;
 using Unity.DotsNetKit.Transport;
 
-public struct NetworkStreamConnection : IComponentData
+namespace Unity.DotsNetKit.NetCode
 {
-    public NetworkConnection Value;
-}
+    public struct NetworkStreamConnection : IComponentData
+    {
+        public NetworkConnection Value;
+    }
 
-public struct NetworkStreamInGame : IComponentData
-{
-}
+    public struct NetworkStreamInGame : IComponentData
+    {
+    }
 
-public struct NetworkStreamDisconnected : IComponentData
-{
-}
+    public struct NetworkStreamDisconnected : IComponentData
+    {
+    }
 
-public struct IncomingCommandDataStreamBufferComponent : IBufferElementData
-{
-    public byte Value;
-}
+    public struct IncomingCommandDataStreamBufferComponent : IBufferElementData
+    {
+        public byte Value;
+    }
 
-public struct IncomingSnapshotDataStreamBufferComponent : IBufferElementData
-{
-    public byte Value;
+    public struct IncomingSnapshotDataStreamBufferComponent : IBufferElementData
+    {
+        public byte Value;
+    }
 }
-
 

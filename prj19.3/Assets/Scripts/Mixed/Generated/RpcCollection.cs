@@ -1,6 +1,7 @@
 using System;
 using Unity.Entities;
 using Unity.DotsNetKit.Transport;
+using Unity.DotsNetKit.NetCode;
 
 public struct RpcCollection : IRpcCollection
 {

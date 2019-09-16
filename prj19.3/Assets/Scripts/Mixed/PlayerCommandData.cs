@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.DotsNetKit.Transport;
+using Unity.DotsNetKit.NetCode;
 
 public struct PlayerCommandData : ICommandData<PlayerCommandData>
 {

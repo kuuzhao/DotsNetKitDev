@@ -1,7 +1,9 @@
-public enum NetworkStreamProtocol
+namespace Unity.DotsNetKit.NetCode
 {
-    Command,
-    Snapshot,
-    Rpc
+    public enum NetworkStreamProtocol
+    {
+        Command,
+        Snapshot,
+        Rpc
+    }
 }
-

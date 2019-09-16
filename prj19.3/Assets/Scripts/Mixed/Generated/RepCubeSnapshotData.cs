@@ -1,5 +1,6 @@
 using Unity.Mathematics;
 using Unity.DotsNetKit.Transport;
+using Unity.DotsNetKit.NetCode;
 
 public struct RepCubeSnapshotData : ISnapshotData<RepCubeSnapshotData>
 {

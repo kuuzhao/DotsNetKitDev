@@ -1,10 +1,13 @@
 
 using UnityEditor.Experimental.AssetImporters;
 
-[ScriptedImporter(0, ".ghost")]
-public class GhostImporter : ScriptedImporter
+namespace Unity.DotsNetKit.NetCode.Editor
 {
-    public override void OnImportAsset(AssetImportContext ctx)
+    [ScriptedImporter(0, ".ghost")]
+    public class GhostImporter : ScriptedImporter
     {
+        public override void OnImportAsset(AssetImportContext ctx)
+        {
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Entities;
 using Unity.DotsNetKit.Transport;
+using Unity.DotsNetKit.NetCode;
 using UnityEngine.SceneManagement;
 
 public struct RpcLoadLevel : IRpcCommand

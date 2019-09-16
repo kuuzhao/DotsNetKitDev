@@ -4,20 +4,23 @@ using Unity.Entities;
 using Unity.DotsNetKit.Transport;
 using Unity.DotsNetKit.Transport.LowLevel.Unsafe;
 
-public struct RpcQueue<T>  where T : struct, IRpcCommand
+namespace Unity.DotsNetKit.NetCode
 {
-    internal int rpcType;
-    public unsafe void Schedule(DynamicBuffer<OutgoingRpcDataStreamBufferComponent> buffer, T data)
+    public struct RpcQueue<T> where T : struct, IRpcCommand
     {
-        DataStreamWriter writer = new DataStreamWriter(128, Allocator.Temp);
-        if (buffer.Length == 0)
-            writer.Write((byte)NetworkStreamProtocol.Rpc);
-        writer.Write(rpcType);
-        data.Serialize(writer);
-        var prevLen = buffer.Length;
-        buffer.ResizeUninitialized(buffer.Length + writer.Length);
-        byte* ptr = (byte*)buffer.GetUnsafePtr();
-        ptr += prevLen;
-        UnsafeUtility.MemCpy(ptr, writer.GetUnsafeReadOnlyPtr(), writer.Length);
+        internal int rpcType;
+        public unsafe void Schedule(DynamicBuffer<OutgoingRpcDataStreamBufferComponent> buffer, T data)
+        {
+            DataStreamWriter writer = new DataStreamWriter(128, Allocator.Temp);
+            if (buffer.Length == 0)
+                writer.Write((byte)NetworkStreamProtocol.Rpc);
+            writer.Write(rpcType);
+            data.Serialize(writer);
+            var prevLen = buffer.Length;
+            buffer.ResizeUninitialized(buffer.Length + writer.Length);
+            byte* ptr = (byte*)buffer.GetUnsafePtr();
+            ptr += prevLen;
+            UnsafeUtility.MemCpy(ptr, writer.GetUnsafeReadOnlyPtr(), writer.Length);
+        }
     }
 }

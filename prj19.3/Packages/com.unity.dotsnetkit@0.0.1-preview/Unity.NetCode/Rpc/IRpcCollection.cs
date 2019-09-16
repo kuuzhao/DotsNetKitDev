@@ -1,9 +1,12 @@
 using Unity.Entities;
 using Unity.DotsNetKit.Transport;
 
-public interface IRpcCollection
+namespace Unity.DotsNetKit.NetCode
 {
-    void ExecuteRpc(int type, DataStreamReader reader, ref DataStreamReader.Context ctx, Entity connection, EntityCommandBuffer.Concurrent commandBuffer, int jobIndex);
-    void ExecuteRpc(int type, DataStreamReader reader, ref DataStreamReader.Context ctx, Entity connection, EntityCommandBuffer commandBuffer);
-    int GetRpcFromType<T>() where T : struct, IRpcCommand;
+    public interface IRpcCollection
+    {
+        void ExecuteRpc(int type, DataStreamReader reader, ref DataStreamReader.Context ctx, Entity connection, EntityCommandBuffer.Concurrent commandBuffer, int jobIndex);
+        void ExecuteRpc(int type, DataStreamReader reader, ref DataStreamReader.Context ctx, Entity connection, EntityCommandBuffer commandBuffer);
+        int GetRpcFromType<T>() where T : struct, IRpcCommand;
+    }
 }

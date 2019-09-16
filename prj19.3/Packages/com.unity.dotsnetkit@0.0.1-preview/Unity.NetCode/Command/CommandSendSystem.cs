@@ -5,64 +5,67 @@ using Unity.Jobs;
 using Unity.DotsNetKit.Transport;
 using Unity.DotsNetKit.Transport.LowLevel.Unsafe;
 
-[UpdateInGroup(typeof(ClientSimulationSystemGroup))]
-// dependency just for acking
-[UpdateAfter(typeof(GhostReceiveSystemGroup))]
-public class CommandSendSystem<TCommandData> : JobComponentSystem
-    where TCommandData : struct, ICommandData<TCommandData>
+namespace Unity.DotsNetKit.NetCode
 {
-    [ExcludeComponent(typeof(NetworkStreamDisconnected))]
-    struct CommandSendJob : IJobForEachWithEntity<CommandTargetComponent>
+    [UpdateInGroup(typeof(ClientSimulationSystemGroup))]
+    // dependency just for acking
+    [UpdateAfter(typeof(GhostReceiveSystemGroup))]
+    public class CommandSendSystem<TCommandData> : JobComponentSystem
+    where TCommandData : struct, ICommandData<TCommandData>
     {
-        public UdpNetworkDriver.Concurrent driver;
-        public NetworkPipeline unreliablePipeline;
-        public ComponentDataFromEntity<NetworkStreamConnection> connectionFromEntity;
-        public ComponentDataFromEntity<NetworkSnapshotAckComponent> ackSnapshot;
-        public BufferFromEntity<TCommandData> inputFromEntity;
-        public uint localTime;
-        public uint inputTargetTick;
-        public unsafe void Execute(Entity entity, int index, [ReadOnly] ref CommandTargetComponent state)
+        [ExcludeComponent(typeof(NetworkStreamDisconnected))]
+        struct CommandSendJob : IJobForEachWithEntity<CommandTargetComponent>
         {
-            DataStreamWriter writer = new DataStreamWriter(128, Allocator.Temp);
-            var ack = ackSnapshot[entity];
-            writer.Write((byte)NetworkStreamProtocol.Command);
-            writer.Write(ack.LastReceivedSnapshotByLocal);
-            writer.Write(ack.ReceivedSnapshotByLocalMask);
-            writer.Write(localTime);
-            writer.Write(ack.LastReceivedRemoteTime - (localTime - ack.LastReceiveTimestamp));
-            if (state.targetEntity != Entity.Null && inputFromEntity.Exists(state.targetEntity))
+            public UdpNetworkDriver.Concurrent driver;
+            public NetworkPipeline unreliablePipeline;
+            public ComponentDataFromEntity<NetworkStreamConnection> connectionFromEntity;
+            public ComponentDataFromEntity<NetworkSnapshotAckComponent> ackSnapshot;
+            public BufferFromEntity<TCommandData> inputFromEntity;
+            public uint localTime;
+            public uint inputTargetTick;
+            public unsafe void Execute(Entity entity, int index, [ReadOnly] ref CommandTargetComponent state)
             {
-                var input = inputFromEntity[state.targetEntity];
-                TCommandData inputData;
-                if (input.GetDataAtTick(inputTargetTick, out inputData) && inputData.Tick == inputTargetTick)
+                DataStreamWriter writer = new DataStreamWriter(128, Allocator.Temp);
+                var ack = ackSnapshot[entity];
+                writer.Write((byte)NetworkStreamProtocol.Command);
+                writer.Write(ack.LastReceivedSnapshotByLocal);
+                writer.Write(ack.ReceivedSnapshotByLocalMask);
+                writer.Write(localTime);
+                writer.Write(ack.LastReceivedRemoteTime - (localTime - ack.LastReceiveTimestamp));
+                if (state.targetEntity != Entity.Null && inputFromEntity.Exists(state.targetEntity))
                 {
-                    writer.Write(inputTargetTick);
-                    inputData.Serialize(writer);
+                    var input = inputFromEntity[state.targetEntity];
+                    TCommandData inputData;
+                    if (input.GetDataAtTick(inputTargetTick, out inputData) && inputData.Tick == inputTargetTick)
+                    {
+                        writer.Write(inputTargetTick);
+                        inputData.Serialize(writer);
+                    }
                 }
+
+                driver.Send(unreliablePipeline, connectionFromEntity[entity].Value, writer);
             }
-
-            driver.Send(unreliablePipeline, connectionFromEntity[entity].Value, writer);
         }
-    }
 
-    private NetworkStreamReceiveSystem m_ReceiveSystem;
-    protected override void OnCreate()
-    {
-        m_ReceiveSystem = World.GetOrCreateSystem<NetworkStreamReceiveSystem>();
-    }
-    protected override JobHandle OnUpdate(JobHandle inputDeps)
-    {
-        var sendJob = new CommandSendJob
+        private NetworkStreamReceiveSystem m_ReceiveSystem;
+        protected override void OnCreate()
         {
-            driver = m_ReceiveSystem.ConcurrentDriver,
-            unreliablePipeline = m_ReceiveSystem.UnreliablePipeline,
-            connectionFromEntity = GetComponentDataFromEntity<NetworkStreamConnection>(),
-            ackSnapshot = GetComponentDataFromEntity<NetworkSnapshotAckComponent>(),
-            inputFromEntity = GetBufferFromEntity<TCommandData>(),
-            localTime = NetworkTimeSystem.TimestampMS,
-            inputTargetTick = NetworkTimeSystem.predictTargetTick
-        };
+            m_ReceiveSystem = World.GetOrCreateSystem<NetworkStreamReceiveSystem>();
+        }
+        protected override JobHandle OnUpdate(JobHandle inputDeps)
+        {
+            var sendJob = new CommandSendJob
+            {
+                driver = m_ReceiveSystem.ConcurrentDriver,
+                unreliablePipeline = m_ReceiveSystem.UnreliablePipeline,
+                connectionFromEntity = GetComponentDataFromEntity<NetworkStreamConnection>(),
+                ackSnapshot = GetComponentDataFromEntity<NetworkSnapshotAckComponent>(),
+                inputFromEntity = GetBufferFromEntity<TCommandData>(),
+                localTime = NetworkTimeSystem.TimestampMS,
+                inputTargetTick = NetworkTimeSystem.predictTargetTick
+            };
 
-        return sendJob.ScheduleSingle(this, inputDeps);
+            return sendJob.ScheduleSingle(this, inputDeps);
+        }
     }
 }

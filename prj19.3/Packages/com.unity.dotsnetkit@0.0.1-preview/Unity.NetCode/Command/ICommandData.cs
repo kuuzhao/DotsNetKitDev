@@ -2,61 +2,64 @@ using Unity.Entities;
 using Unity.DotsNetKit.Transport;
 using Unity.DotsNetKit.Transport.Utilities;
 
-public interface ICommandData<T> : IBufferElementData where T: struct, ICommandData<T>
+namespace Unity.DotsNetKit.NetCode
 {
-    uint Tick { get; }
-    void Serialize(DataStreamWriter writer);
-    void Deserialize(uint tick, DataStreamReader reader, ref DataStreamReader.Context ctx);
-}
-
-public static class CommandDataUtility
-{
-    public static bool GetDataAtTick<T>(this DynamicBuffer<T> commandArray, uint targetTick, out T commandData) where T : struct, ICommandData<T>
+    public interface ICommandData<T> : IBufferElementData where T : struct, ICommandData<T>
     {
-        int beforeIdx = 0;
-        uint beforeTick = 0;
-        for (int i = 0; i < commandArray.Length; ++i)
-        {
-            uint tick = commandArray[i].Tick;
-            if (!SequenceHelpers.IsNewer(tick, targetTick) && (beforeTick == 0 || SequenceHelpers.IsNewer(tick, beforeTick)))
-            {
-                beforeIdx = i;
-                beforeTick = tick;
-            }
-        }
-
-        if (beforeTick == 0)
-        {
-            commandData = default(T);
-            return false;
-        }
-
-        commandData = commandArray[beforeIdx];
-        return true;
+        uint Tick { get; }
+        void Serialize(DataStreamWriter writer);
+        void Deserialize(uint tick, DataStreamReader reader, ref DataStreamReader.Context ctx);
     }
-    public static void AddCommandData<T>(this DynamicBuffer<T> commandArray, T commandData) where T : struct, ICommandData<T>
+
+    public static class CommandDataUtility
     {
-        uint targetTick = commandData.Tick;
-        int oldestIdx = 0;
-        uint oldestTick = 0;
-        for (int i = 0; i < commandArray.Length; ++i)
+        public static bool GetDataAtTick<T>(this DynamicBuffer<T> commandArray, uint targetTick, out T commandData) where T : struct, ICommandData<T>
         {
-            uint tick = commandArray[i].Tick;
-            if (tick == targetTick)
+            int beforeIdx = 0;
+            uint beforeTick = 0;
+            for (int i = 0; i < commandArray.Length; ++i)
             {
-                // Already exists, replace it
-                commandArray[i] = commandData;
-                return;
+                uint tick = commandArray[i].Tick;
+                if (!SequenceHelpers.IsNewer(tick, targetTick) && (beforeTick == 0 || SequenceHelpers.IsNewer(tick, beforeTick)))
+                {
+                    beforeIdx = i;
+                    beforeTick = tick;
+                }
             }
-            if (oldestTick == 0 || SequenceHelpers.IsNewer(oldestTick, tick))
+
+            if (beforeTick == 0)
             {
-                oldestIdx = i;
-                oldestTick = tick;
+                commandData = default(T);
+                return false;
             }
+
+            commandData = commandArray[beforeIdx];
+            return true;
         }
-        if (commandArray.Length < 32)
-            commandArray.Add(commandData);
-        else
-            commandArray[oldestIdx] = commandData;
+        public static void AddCommandData<T>(this DynamicBuffer<T> commandArray, T commandData) where T : struct, ICommandData<T>
+        {
+            uint targetTick = commandData.Tick;
+            int oldestIdx = 0;
+            uint oldestTick = 0;
+            for (int i = 0; i < commandArray.Length; ++i)
+            {
+                uint tick = commandArray[i].Tick;
+                if (tick == targetTick)
+                {
+                    // Already exists, replace it
+                    commandArray[i] = commandData;
+                    return;
+                }
+                if (oldestTick == 0 || SequenceHelpers.IsNewer(oldestTick, tick))
+                {
+                    oldestIdx = i;
+                    oldestTick = tick;
+                }
+            }
+            if (commandArray.Length < 32)
+                commandArray.Add(commandData);
+            else
+                commandArray[oldestIdx] = commandData;
+        }
     }
 }

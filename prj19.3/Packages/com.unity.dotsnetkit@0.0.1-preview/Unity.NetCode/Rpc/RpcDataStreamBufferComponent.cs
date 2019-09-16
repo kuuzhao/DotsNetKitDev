@@ -1,10 +1,13 @@
 using Unity.Entities;
 
-public struct OutgoingRpcDataStreamBufferComponent : IBufferElementData
+namespace Unity.DotsNetKit.NetCode
 {
-    public byte Value;
-}
-public struct IncomingRpcDataStreamBufferComponent : IBufferElementData
-{
-    public byte Value;
+    public struct OutgoingRpcDataStreamBufferComponent : IBufferElementData
+    {
+        public byte Value;
+    }
+    public struct IncomingRpcDataStreamBufferComponent : IBufferElementData
+    {
+        public byte Value;
+    }
 }

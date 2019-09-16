@@ -1,5 +1,6 @@
 using Unity.Entities;
 using Unity.Transforms;
+using Unity.DotsNetKit.NetCode;
 
 [DisableAutoCreation]
 public partial class RepCubeGhostSpawnSystem : DefaultGhostSpawnSystem<RepCubeSnapshotData>
