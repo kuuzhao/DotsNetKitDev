@@ -2,11 +2,14 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using System.IO;
+using System;
 
 #if UNITY_EDITOR
 class BatchModePlayer
 {
-    [MenuItem("DotsNetKit/TestRunPlayer")]
+    static string sPrjPath;
+    static bool[] IsPlayerRunning = new bool[] { false, false, false, false, false };
+
     static void RunPlayer()
     {
         var editorWindows = Resources.FindObjectsOfTypeAll<EditorWindow>();
@@ -15,8 +18,6 @@ class BatchModePlayer
             var editorWindowName = editorWindow.ToString();
             if (!editorWindowName.Contains("GameView"))
                 editorWindow.Close();
-            else
-                Debug.Log(editorWindowName);
         }
 
         EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
@@ -26,82 +27,161 @@ class BatchModePlayer
         EditorApplication.isPlaying = true;
     }
 
-    [MenuItem("DotsNetKit/Run Player/1")]
-    static void Run1Player()
+    [MenuItem("DotsNetKit/Run Pseudo Player/#1")]
+    static void RunPlayer1()
     {
-        CreateHardLinkIfNeeded();
+        CreateHardLinkPrj(1);
 #if UNITY_EDITOR_WIN
         DoRunPlayer(1);
 #endif
     }
-    [MenuItem("DotsNetKit/Run Player/2")]
-    static void Run2Players()
+    [MenuItem("DotsNetKit/Run Pseudo Player/#1", true)]
+    static bool RunPlayer1Valid()
     {
-        CreateHardLinkIfNeeded();
+        return !IsPlayerRunning[1];
+    }
+
+    [MenuItem("DotsNetKit/Run Pseudo Player/#2")]
+    static void RunPlayer2()
+    {
+        CreateHardLinkPrj(2);
 #if UNITY_EDITOR_WIN
-        for (int i = 1; i <= 2; ++i)
-            DoRunPlayer(i);
+        DoRunPlayer(2);
 #endif
     }
-    [MenuItem("DotsNetKit/Run Player/3")]
-    static void Run3Players()
+    [MenuItem("DotsNetKit/Run Pseudo Player/#2", true)]
+    static bool RunPlayer2Valid()
     {
-        CreateHardLinkIfNeeded();
+        return !IsPlayerRunning[2];
+    }
+
+    [MenuItem("DotsNetKit/Run Pseudo Player/#3")]
+    static void RunPlayer3()
+    {
+        CreateHardLinkPrj(3);
 #if UNITY_EDITOR_WIN
-        for (int i = 1; i <= 3; ++i)
-            DoRunPlayer(i);
+        DoRunPlayer(3);
 #endif
     }
-    [MenuItem("DotsNetKit/Run Player/4")]
-    static void Run4Players()
+    [MenuItem("DotsNetKit/Run Pseudo Player/#3", true)]
+    static bool RunPlayer3Valid()
     {
-        CreateHardLinkIfNeeded();
+        return !IsPlayerRunning[3];
+    }
+
+    [MenuItem("DotsNetKit/Run Pseudo Player/#4")]
+    static void RunPlayer4()
+    {
+        CreateHardLinkPrj(4);
 #if UNITY_EDITOR_WIN
-        for (int i = 1; i <= 4; ++i)
-            DoRunPlayer(i);
+        DoRunPlayer(4);
 #endif
+    }
+    [MenuItem("DotsNetKit/Run Pseudo Player/#4", true)]
+    static bool RunPlayer4Valid()
+    {
+        return !IsPlayerRunning[4];
     }
 
     // The range of i is [1, 4]
     static void DoRunPlayer(int i)
     {
-        string prjPath = Directory.GetParent(Application.dataPath).FullName;
-        string playerPrjRoot = Path.Combine(prjPath, "DotsNetKitPlayers");
-        string playerPrjPath = Path.Combine(playerPrjRoot, string.Format("Player{0}", i));
+        string playerPrjRoot = Path.Combine(sPrjPath, "DotsNetKitPseudoPlayers");
+        string playerPrjPath = Path.Combine(playerPrjRoot, string.Format("PseudoPlayer{0}", i));
 
         string unityArgs = string.Format("-disable-assembly-updater -projectPath {0} -executeMethod BatchModePlayer.RunPlayer", playerPrjPath);
 
-#if true
         System.Diagnostics.Process process = new System.Diagnostics.Process();
         System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
         startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
         startInfo.FileName = EditorApplication.applicationPath;
         startInfo.Arguments = unityArgs;
         process.StartInfo = startInfo;
+        process.EnableRaisingEvents = true;
+        switch (i)
+        {
+            case 1:
+                process.Exited += Player1Exited;
+                break;
+            case 2:
+                process.Exited += Player2Exited;
+                break;
+            case 3:
+                process.Exited += Player3Exited;
+                break;
+            case 4:
+                process.Exited += Player4Exited;
+                break;
+        }
         process.Start();
-#else
-        Debug.Log(unityArgs);
-#endif
+        IsPlayerRunning[i] = true;
+    }
+
+    static void Player1Exited(object sender, System.EventArgs e)
+    {
+        RemoveHardLinkPrj(1);
+        IsPlayerRunning[1] = false;
+    }
+
+    static void Player2Exited(object sender, System.EventArgs e)
+    {
+        RemoveHardLinkPrj(2);
+        IsPlayerRunning[2] = false;
+    }
+
+    static void Player3Exited(object sender, System.EventArgs e)
+    {
+        RemoveHardLinkPrj(3);
+        IsPlayerRunning[3] = false;
+    }
+    static void Player4Exited(object sender, System.EventArgs e)
+    {
+        RemoveHardLinkPrj(4);
+        IsPlayerRunning[4] = false;
     }
 
     // [MenuItem("DotsNetKit/Run Clients/CreateLink")]
-    static void CreateHardLinkIfNeeded()
+    static void CreateHardLinkPrj(int i)
     {
-        string prjPath = Directory.GetParent(Application.dataPath).FullName;
-        string playerPrjRoot = Path.Combine(prjPath, "DotsNetKitPlayers");
-        for (int i = 1; i <= 4; ++i)
-        {
-            string playerPrjName = string.Format("Player{0}", i);
-            string playerPrjPath = Path.Combine(playerPrjRoot, playerPrjName);
+        sPrjPath = Directory.GetParent(Application.dataPath).FullName;
+        string playerPrjRoot = Path.Combine(sPrjPath, "DotsNetKitPseudoPlayers");
+        string playerPrjName = string.Format("PseudoPlayer{0}", i);
+        string playerPrjPath = Path.Combine(playerPrjRoot, playerPrjName);
 
 #if UNITY_EDITOR_WIN
-            MakeHardLinedPrj(playerPrjPath);
+        CreateHardLinedPrjWin(playerPrjPath);
 #endif
-        }
+    }
+
+    static void RemoveHardLinkPrj(int i)
+    {
+#if UNITY_EDITOR_WIN
+        RemoveHardLinkPrjWin(i);
+#endif
     }
 
 #if UNITY_EDITOR_WIN
-    static void MakeHardLinedPrj(string playerPrjPath)
+    static void RemoveHardLinkPrjWin(int i)
+    {
+        string playerPrjRoot = Path.Combine(sPrjPath, "DotsNetKitPseudoPlayers");
+        string playerPrjName = string.Format("PseudoPlayer{0}", i);
+        string playerPrjPath = Path.Combine(playerPrjRoot, playerPrjName);
+
+        string linkToAssets = Path.Combine(playerPrjPath, "Assets");
+        string linkToLibrary = Path.Combine(playerPrjPath, "Library");
+        string linkToPackages = Path.Combine(playerPrjPath, "Packages");
+        string linkToProjectSettings = Path.Combine(playerPrjPath, "ProjectSettings");
+        string linkToAutoBuild = Path.Combine(playerPrjPath, "AutoBuild");
+
+        ExecuteCommand("rmdir " + linkToAssets);
+        ExecuteCommand("rmdir " + linkToLibrary);
+        ExecuteCommand("rmdir " + linkToPackages);
+        ExecuteCommand("rmdir " + linkToProjectSettings);
+        ExecuteCommand("rmdir " + linkToAutoBuild);
+        ExecuteCommand("rmdir /S /Q" + playerPrjPath);
+    }
+
+    static void CreateHardLinedPrjWin(string playerPrjPath)
     {
         Directory.CreateDirectory(playerPrjPath);
         // remove existing links
@@ -117,12 +197,11 @@ class BatchModePlayer
         ExecuteCommand("rmdir " + linkToProjectSettings);
         ExecuteCommand("rmdir " + linkToAutoBuild);
 
-        string prjPath = Directory.GetParent(Application.dataPath).FullName;
-        string targetAssets = Path.Combine(prjPath, "Assets");
-        string targetLibrary = Path.Combine(prjPath, "Library");
-        string targetPackages = Path.Combine(prjPath, "Packages");
-        string targetProjectSettings = Path.Combine(prjPath, "ProjectSettings");
-        string targetAutoBuild = Path.Combine(prjPath, "AutoBuild");
+        string targetAssets = Path.Combine(sPrjPath, "Assets");
+        string targetLibrary = Path.Combine(sPrjPath, "Library");
+        string targetPackages = Path.Combine(sPrjPath, "Packages");
+        string targetProjectSettings = Path.Combine(sPrjPath, "ProjectSettings");
+        string targetAutoBuild = Path.Combine(sPrjPath, "AutoBuild");
 
         ExecuteCommand(string.Format("mklink /J {0} {1}", linkToAssets, targetAssets));
         ExecuteCommand(string.Format("mklink /J {0} {1}", linkToLibrary, targetLibrary));
@@ -143,6 +222,5 @@ class BatchModePlayer
     }
 #endif
 }
-
 
 #endif
