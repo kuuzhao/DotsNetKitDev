@@ -31,7 +31,20 @@ namespace Unity.DotsNetKit.NetCode
                 writer.Write(ack.LastReceivedSnapshotByLocal);
                 writer.Write(ack.ReceivedSnapshotByLocalMask);
                 writer.Write(localTime);
-                writer.Write(ack.LastReceivedRemoteTime - (localTime - ack.LastReceiveTimestamp));
+
+                // writer.Write(ack.LastReceivedRemoteTime - (localTime - ack.LastReceiveTimestamp));
+                // TODO: LZ:
+                //      to be confirmed
+                //      we should send "t0 + (T1 - T0)", but not "t0 - (T1 - T0)"
+                //
+                // because:
+                //      RTT should equals to : (t1 - t0) - (T1 - T0) = t1 - [t0 + (T1 - T0)]
+                //      t0: A send time         // ack.LastReceivedRemoteTime
+                //      T0: B receive time      // ack.LastReceiveTimestamp
+                //      T1: B send time         // localTime
+                //      t1: A receive time
+                writer.Write(ack.LastReceivedRemoteTime + (localTime - ack.LastReceiveTimestamp));
+
                 if (state.targetEntity != Entity.Null && inputFromEntity.Exists(state.targetEntity))
                 {
                     var input = inputFromEntity[state.targetEntity];

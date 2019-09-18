@@ -221,8 +221,13 @@ namespace Unity.DotsNetKit.NetCode
                                         uint snapshotMask = reader.ReadUInt(ref ctx);
                                         snapshotAck.UpdateReceivedByRemote(snapshot, snapshotMask);
                                         uint remoteTime = reader.ReadUInt(ref ctx);
-                                        uint localTimeMinusRTT = reader.ReadUInt(ref ctx);
-                                        snapshotAck.UpdateRemoteTime(remoteTime, localTimeMinusRTT, localTime);
+
+                                        //uint localTimeMinusRTT = reader.ReadUInt(ref ctx);
+                                        //snapshotAck.UpdateRemoteTime(remoteTime, localTimeMinusRTT, localTime);
+                                        // TODO: LZ:
+                                        //      to be confirmed: fix RTT calculation:
+                                        uint localSentPlusRomoteProcess = reader.ReadUInt(ref ctx);
+                                        snapshotAck.UpdateRemoteTime(remoteTime, localSentPlusRomoteProcess, localTime);
 
                                         int headerSize = 1 + 4 * 4;
 
@@ -235,8 +240,14 @@ namespace Unity.DotsNetKit.NetCode
                                 case NetworkStreamProtocol.Snapshot:
                                     {
                                         uint remoteTime = reader.ReadUInt(ref ctx);
-                                        uint localTimeMinusRTT = reader.ReadUInt(ref ctx);
-                                        snapshotAck.UpdateRemoteTime(remoteTime, localTimeMinusRTT, localTime);
+
+                                        //uint localTimeMinusRTT = reader.ReadUInt(ref ctx);
+                                        //snapshotAck.UpdateRemoteTime(remoteTime, localTimeMinusRTT, localTime);
+                                        // TODO: LZ:
+                                        //      to be confirmed: fix RTT calculation:
+                                        uint localSentPlusRomoteProcess = reader.ReadUInt(ref ctx);
+                                        snapshotAck.UpdateRemoteTime(remoteTime, localSentPlusRomoteProcess, localTime);
+
                                         int headerSize = 1 + 4 * 2;
 
                                         var buffer = snapshotBuffer[entity];

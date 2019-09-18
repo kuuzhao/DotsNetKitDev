@@ -62,12 +62,15 @@ namespace Unity.DotsNetKit.NetCode
         public uint LastReceivedSnapshotByLocal;
         public uint ReceivedSnapshotByLocalMask;
 
-        public void UpdateRemoteTime(uint remoteTime, uint localTimeMinusRTT, uint localTime)
+        // public void UpdateRemoteTime(uint remoteTime, uint localTimeMinusRTT, uint localTime)
+        // TODO: LZ:
+        //      to be confirmed: fix RTT calculation:
+        public void UpdateRemoteTime(uint remoteTime, uint localSentPlusRomoteProcess, uint localTime)
         {
             if (remoteTime != 0 && SequenceHelpers.IsNewer(remoteTime, LastReceivedRemoteTime))
             {
                 LastReceivedRemoteTime = remoteTime;
-                LastReceivedRTT = localTime - localTimeMinusRTT;
+                LastReceivedRTT = localTime - localSentPlusRomoteProcess;
                 LastReceiveTimestamp = localTime;
             }
         }

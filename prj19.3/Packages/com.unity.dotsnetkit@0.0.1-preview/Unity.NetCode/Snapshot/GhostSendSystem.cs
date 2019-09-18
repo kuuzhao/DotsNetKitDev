@@ -271,7 +271,19 @@ namespace Unity.DotsNetKit.NetCode
                 dataStream.Write((byte)NetworkStreamProtocol.Snapshot);
 
                 dataStream.Write(localTime);
-                dataStream.Write(snapshotAck.LastReceivedRemoteTime - (localTime - snapshotAck.LastReceiveTimestamp));
+
+                // dataStream.Write(snapshotAck.LastReceivedRemoteTime - (localTime - snapshotAck.LastReceiveTimestamp));
+                // TODO: LZ:
+                //      to be confirmed
+                //      we should send "t0 + (T1 - T0)", but not "t0 - (T1 - T0)"
+                //
+                // because:
+                //      RTT should equals to : (t1 - t0) - (T1 - T0) = t1 - [t0 + (T1 - T0)]
+                //      t0: A send time         // snapshotAck.LastReceivedRemoteTime
+                //      T0: B receive time      // snapshotAck.LastReceiveTimestamp
+                //      T1: B send time         // localTime
+                //      t1: A receive time
+                dataStream.Write(snapshotAck.LastReceivedRemoteTime + (localTime - snapshotAck.LastReceiveTimestamp));
 
                 dataStream.Write(currentTick);
 

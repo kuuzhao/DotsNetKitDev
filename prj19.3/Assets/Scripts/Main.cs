@@ -21,7 +21,7 @@ public class Main : MonoBehaviour
 
         if (GUI.Button(new Rect(100, 100, 100, 50), "Start sever"))
         {
-            Application.targetFrameRate = 60;
+            Application.targetFrameRate = 20;
             SimpleServer.Start("myAppId");
             showButton = false;
         }
