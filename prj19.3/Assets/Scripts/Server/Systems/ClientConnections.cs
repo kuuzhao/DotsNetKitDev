@@ -33,7 +33,7 @@ public class LoadRemoteLevelSystem : ComponentSystem
             var ent = entities[i];
             var networkId = networkIds[i];
 
-            Console.WriteLine(string.Format("New client(NetworkId={0}) connected.", networkId.Value));
+            SimpleConsole.WriteLine(string.Format("New client(NetworkId={0}) connected.", networkId.Value));
 
             // Load level RPC
             var rpcLoadLevelQueue = ClientServerSystemManager.serverWorld.GetOrCreateSystem<DotsNetKit193RpcSystem>().GetRpcQueue<RpcLoadLevel>();
@@ -106,7 +106,7 @@ public class HandleDisconnect : ComponentSystem
         {
             var networkId = networkIds[i];
             var ctc = ctcs[i];
-            Console.WriteLine(string.Format("Client(NetworkId={0}) disconnected.", networkId.Value));
+            SimpleConsole.WriteLine(string.Format("Client(NetworkId={0}) disconnected.", networkId.Value));
 
             if (ctc.targetEntity != Entity.Null)
             {
@@ -116,5 +116,6 @@ public class HandleDisconnect : ComponentSystem
         }
 
         networkIds.Dispose();
+        ctcs.Dispose();
     }
 }

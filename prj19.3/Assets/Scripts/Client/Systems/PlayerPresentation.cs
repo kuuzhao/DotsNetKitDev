@@ -57,7 +57,7 @@ public class PlayerPresentation : ComponentSystem
             var renderer = EntityManager.GetComponentObject<MeshRenderer>(goEnt);
             renderer.material.color = new Color(cubeData.color.x, cubeData.color.y, cubeData.color.z);
             if (cubeData.networkId == ServerConnection.sNetworkId)
-                Console.SetColor(renderer.material.color);
+                SimpleConsole.SetColor(renderer.material.color);
         }
         goEntities.Dispose();
     }

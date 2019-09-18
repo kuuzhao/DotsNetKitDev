@@ -29,7 +29,7 @@ public class ServerConnection : ComponentSystem
             var networkIdComp = networkIdComps[0];
 
             sNetworkId = networkIdComp.Value;
-            Console.WriteLine(string.Format("NetworkId({0}) Assigned .", sNetworkId));
+            SimpleConsole.WriteLine(string.Format("NetworkId({0}) Assigned .", sNetworkId));
 
             EntityManager.AddComponentData(connectionEntity, new NetworkStreamInGame());
         }

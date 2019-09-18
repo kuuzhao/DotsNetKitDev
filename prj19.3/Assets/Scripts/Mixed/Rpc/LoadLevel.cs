@@ -12,14 +12,14 @@ public struct RpcLoadLevel : IRpcCommand
 
     public void Execute(Entity connection, EntityCommandBuffer.Concurrent commandBuffer, int jobIndex)
     {
-        Console.WriteLine(string.Format("RPC Load level ({0})", levelName));
+        SimpleConsole.WriteLine(string.Format("RPC Load level ({0})", levelName));
 
         SceneManager.LoadScene(levelName);
     }
 
     public void Execute(Entity connection, EntityCommandBuffer commandBuffer)
     {
-        Console.WriteLine(string.Format("RPC Load level ({0})", levelName));
+        SimpleConsole.WriteLine(string.Format("RPC Load level ({0})", levelName));
 
         SceneManager.LoadScene(levelName);
     }
