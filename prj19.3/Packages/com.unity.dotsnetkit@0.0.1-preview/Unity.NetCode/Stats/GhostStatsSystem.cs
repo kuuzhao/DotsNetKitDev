@@ -275,9 +275,7 @@ namespace Unity.DotsNetKit.NetCode
         protected override void OnCreate()
         {
             lastFrame = 0;
-            connectionGroup = GetEntityQuery(ComponentType.ReadWrite<NetworkSnapshotAckComponent>());
-            socket = new DebugWebSocket(World.GetExistingSystem<ClientSimulationSystemGroup>().ClientWorldIndex);
-
+            connectionGroup = GetEntityQuery(ComponentType.ReadWrite<NetworkSnapshotAckComponent>(), ComponentType.ReadOnly<NetworkIdComponent>());
         }
 
         internal void SetStatsBuffer(NativeArray<uint> recvStats, string[] nameList)
@@ -303,6 +301,21 @@ namespace Unity.DotsNetKit.NetCode
         {
             if (ghostStatData == null)
                 return;
+
+            uint frame = 0;
+            var connection = connectionGroup.ToComponentDataArray<NetworkSnapshotAckComponent>(Allocator.TempJob);
+            if (connection.Length > 0)
+                frame = connection[0].LastReceivedSnapshotByLocal;
+            connection.Dispose();
+
+            if (socket == null)
+            {
+                var networkIds = connectionGroup.ToComponentDataArray<NetworkIdComponent>(Allocator.TempJob);
+                var networkId = networkIds[0].Value;
+                networkIds.Dispose();
+                socket = new DebugWebSocket(networkId);
+            }
+
             if (socket.AcceptNewConnection())
             {
                 socket.SendText(ghostList);
@@ -310,15 +323,7 @@ namespace Unity.DotsNetKit.NetCode
 
             if (!socket.HasConnection)
                 return;
-            var connection = connectionGroup.ToComponentDataArray<NetworkSnapshotAckComponent>(Allocator.TempJob);
-            if (connection.Length == 0)
-            {
-                connection.Dispose();
-                return;
-            }
 
-            var frame = connection[0].LastReceivedSnapshotByLocal;
-            connection.Dispose();
             if (frame <= lastFrame)
                 return;
             if (lastFrame == 0)

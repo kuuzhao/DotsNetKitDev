@@ -217,7 +217,7 @@ namespace Unity.DotsNetKit.NetCode
                                     {
                                         var buffer = cmdBuffer[entity];
                                         // FIXME: should be handle by a custom command stream system
-                                        uint snapshot = reader.ReadUInt(ref ctx);
+                                        uint snapshot = reader.ReadUInt(ref ctx);       // unit: server tick
                                         uint snapshotMask = reader.ReadUInt(ref ctx);
                                         snapshotAck.UpdateReceivedByRemote(snapshot, snapshotMask);
                                         uint remoteTime = reader.ReadUInt(ref ctx);
