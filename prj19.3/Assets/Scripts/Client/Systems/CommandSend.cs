@@ -18,11 +18,15 @@ public class InputSystem : ComponentSystem
 {
     EntityQuery cmdTargetGroup;
 
+    NetworkTimeSystem m_TimeSystem;
+
     protected override void OnCreate()
     {
         cmdTargetGroup = GetEntityQuery(
             ComponentType.ReadWrite<CommandTargetComponent>(),
             ComponentType.Exclude<NetworkStreamDisconnected>());
+
+        m_TimeSystem = World.GetOrCreateSystem<NetworkTimeSystem>();
     }
 
     protected override void OnUpdate()
@@ -45,7 +49,7 @@ public class InputSystem : ComponentSystem
                 var cmdBuf = EntityManager.GetBuffer<PlayerCommandData>(ent);
 
                 PlayerCommandData cmdData = default;
-                cmdData.tick = NetworkTimeSystem.predictTargetTick;
+                cmdData.tick = m_TimeSystem.predictTargetTick;
                 cmdData.horizontal = Input.GetAxisRaw("Horizontal");
                 cmdData.vertical = Input.GetAxisRaw("Vertical");
 

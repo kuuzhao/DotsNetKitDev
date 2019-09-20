@@ -54,6 +54,11 @@ public class RepCubeGhostUpdateSystem : JobComponentSystem
 
         }
     }
+    private NetworkTimeSystem m_NetworkTimeSystem;
+    protected override void OnCreate()
+    {
+        m_NetworkTimeSystem = World.GetOrCreateSystem<NetworkTimeSystem>();
+    }
     // TODO: LZ:
     //      we may not have predicted job
     protected override JobHandle OnUpdate(JobHandle inputDeps)
@@ -61,12 +66,12 @@ public class RepCubeGhostUpdateSystem : JobComponentSystem
         var updateInterpolatedJob = new UpdateInterpolatedJob
         {
             snapshotFromEntity = GetBufferFromEntity<RepCubeSnapshotData>(),
-            targetTick = NetworkTimeSystem.interpolateTargetTick
+            targetTick = m_NetworkTimeSystem.interpolateTargetTick
         };
         var updatePredictedJob = new UpdatePredictedJob
         {
             snapshotFromEntity = GetBufferFromEntity<RepCubeSnapshotData>(),
-            targetTick = NetworkTimeSystem.predictTargetTick
+            targetTick = m_NetworkTimeSystem.predictTargetTick
         };
         inputDeps = updateInterpolatedJob.Schedule(this, inputDeps);
         return updatePredictedJob.Schedule(this, inputDeps);

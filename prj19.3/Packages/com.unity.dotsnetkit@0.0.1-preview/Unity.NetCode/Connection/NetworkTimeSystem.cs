@@ -11,8 +11,8 @@ namespace Unity.DotsNetKit.NetCode
     public class NetworkTimeSystem : ComponentSystem
     {
         public static uint TimestampMS => (uint)(System.Diagnostics.Stopwatch.GetTimestamp() / System.TimeSpan.TicksPerMillisecond);
-        public static uint interpolateTargetTick;
-        public static uint predictTargetTick;
+        public uint interpolateTargetTick;
+        public uint predictTargetTick;
         public static int lastRTT;
 
         private int interpolateDelta;

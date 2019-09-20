@@ -61,9 +61,11 @@ namespace Unity.DotsNetKit.NetCode
         }
 
         private NetworkStreamReceiveSystem m_ReceiveSystem;
+        private NetworkTimeSystem m_TimeSystem;
         protected override void OnCreate()
         {
             m_ReceiveSystem = World.GetOrCreateSystem<NetworkStreamReceiveSystem>();
+            m_TimeSystem = World.GetOrCreateSystem<NetworkTimeSystem>();
         }
         protected override JobHandle OnUpdate(JobHandle inputDeps)
         {
@@ -75,7 +77,7 @@ namespace Unity.DotsNetKit.NetCode
                 ackSnapshot = GetComponentDataFromEntity<NetworkSnapshotAckComponent>(),
                 inputFromEntity = GetBufferFromEntity<TCommandData>(),
                 localTime = NetworkTimeSystem.TimestampMS,
-                inputTargetTick = NetworkTimeSystem.predictTargetTick
+                inputTargetTick = m_TimeSystem.predictTargetTick
             };
 
             return sendJob.ScheduleSingle(this, inputDeps);

@@ -54,12 +54,14 @@ namespace Unity.DotsNetKit.NetCode
             m_NetStats = new NativeArray<uint>(serializers.Length * 3 + 3, Allocator.Persistent);
             World.GetOrCreateSystem<GhostStatsSystem>().SetStatsBuffer(m_NetStats, serializers.CreateSerializerNameList());
 #endif
+            m_TimeSystem = World.GetOrCreateSystem<NetworkTimeSystem>();
 
             m_DelayedDespawnQueue = new NativeQueue<DelayedDespawnGhost>(Allocator.Persistent);
 
             serializers.Initialize(World);
         }
 
+        private NetworkTimeSystem m_TimeSystem;
 #if ENABLE_UNITY_COLLECTIONS_CHECKS
         private NativeArray<uint> m_NetStats;
 #endif
@@ -290,7 +292,7 @@ namespace Unity.DotsNetKit.NetCode
 #endif
                 replicatedEntityType = ComponentType.ReadWrite<ReplicatedEntityComponent>(),
                 delayedDespawnQueue = m_DelayedDespawnQueue,
-                targetTick = NetworkTimeSystem.interpolateTargetTick,
+                targetTick = m_TimeSystem.interpolateTargetTick,
                 predictedFromEntity = GetComponentDataFromEntity<PredictedEntityComponent>(true)
             };
             inputDeps = readJob.Schedule(JobHandle.CombineDependencies(inputDeps, playerHandle));

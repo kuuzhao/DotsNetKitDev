@@ -49,6 +49,7 @@ namespace Unity.DotsNetKit.NetCode
         // The entities which need to wait to be spawned on the right tick (interpolated)
         private NativeList<DelayedSpawnGhost> m_CurrentPredictedSpawnList;
         private EndSimulationEntityCommandBufferSystem m_Barrier;
+        private NetworkTimeSystem m_TimeSystem;
 
         protected abstract EntityArchetype GetGhostArchetype();
         protected abstract EntityArchetype GetPredictedGhostArchetype();
@@ -92,6 +93,8 @@ namespace Unity.DotsNetKit.NetCode
 
             m_PredictSpawnGhosts = new NativeList<PredictSpawnGhost>(16, Allocator.Persistent);
             m_PredictionSpawnCleanupMap = new NativeHashMap<int, int>(16, Allocator.Persistent);
+
+            m_TimeSystem = World.GetOrCreateSystem<NetworkTimeSystem>();
         }
 
         protected override void OnDestroy()
@@ -256,7 +259,7 @@ namespace Unity.DotsNetKit.NetCode
             EntityManager.DestroyEntity(m_InvalidGhosts);
             m_InvalidGhosts.Clear();
 
-            var targetTick = NetworkTimeSystem.interpolateTargetTick;
+            var targetTick = m_TimeSystem.interpolateTargetTick;
             m_CurrentDelayedSpawnList.Clear();
             while (m_DelayedSpawnQueue.Count > 0 &&
                    !SequenceHelpers.IsNewer(m_DelayedSpawnQueue.Peek().spawnTick, targetTick))
